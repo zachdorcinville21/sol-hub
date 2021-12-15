@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@brainhubeu/react-carousel": "^2.0.4",
     "@craco/craco": "^6.4.3",
+    "@nfteyez/sol-rayz": "^0.8.0",
+    "@nfteyez/sol-rayz-react": "^0.8.2",
+    "@solana/web3.js": "^1.31.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -42,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/brainhubeu__react-carousel": "^2.0.5",
     "autoprefixer": "^9.8.8",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
