@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { connectToWallet } from '../util/connectToWallet';
 import { Phantom } from './types';
 import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
+import * as solanaWeb3 from '@solana/web3.js';
 
 interface WalletControls {
     nfts: Array<{ [key: string]: any }> | null;
@@ -47,12 +48,26 @@ export const useWallet = (): WalletControls => {
             setPhantom(window["solana"]);
         }
 
-        // return () => {
-        //     (async () => {
-        //         phantom?.disconnect();
-        //     })();
-        // }
-    }, [phantom]);
+        return () => {
+            (async () => {
+                phantom?.disconnect();
+            })();
+        }
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            const connection = new solanaWeb3.Connection(
+                solanaWeb3.clusterApiUrl('devnet'),
+                'confirmed',
+            );
+
+            if (phantom && phantom!.publicKey !== null) {
+                const balance = await connection.getBalance(phantom!.publicKey);
+                console.log(balance);
+            }
+        })();
+    }, [publicKey]);
 
     return {
         nfts,
