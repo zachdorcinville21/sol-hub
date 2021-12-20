@@ -53,7 +53,7 @@ export const useWallet = (): WalletControls => {
                 phantom?.disconnect();
             })();
         }
-    }, []);
+    }, [phantom]);
 
     useEffect(() => {
         (async () => {
@@ -67,7 +67,7 @@ export const useWallet = (): WalletControls => {
                 console.log(balance);
             }
         })();
-    }, [publicKey]);
+    }, [phantom, publicKey]);
 
     return {
         nfts,

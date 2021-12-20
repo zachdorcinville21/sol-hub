@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function getSolPrice(): Promise<number> {
+export async function getSolPrice(): Promise<any> {
     let solPrice = null;
     
     try {
