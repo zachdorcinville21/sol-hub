@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { connectToWallet } from '../util/connectToWallet';
+import { createUser } from './createUser';
 import { Phantom } from './types';
 import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
 import * as solanaWeb3 from '@solana/web3.js';
@@ -34,7 +35,14 @@ export const useWallet = (): WalletControls => {
         const tokenList = await getParsedNftAccountsByOwner({ publicAddress: result });
         setNfts(tokenList);
 
-        setConnected(true);
+        let createUserStatus = null;
+
+        if (result !== null) createUserStatus = await createUser(result);
+        console.log(createUserStatus)
+
+        if (createUserStatus === 'OK') {
+            setConnected(true);
+        }
     }
 
     const onDisconnectClick = async () => {
