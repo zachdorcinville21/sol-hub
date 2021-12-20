@@ -6,7 +6,6 @@ export async function getSolPrice(req, res) {
     try {
         const result = await axios.get('https://api.binance.com/api/v3/ticker/price?symbol=SOLUSDT');
         const data = result.data;
-        console.log(data)
 
         if (data) price = data;
     } catch (e) {
@@ -15,3 +14,4 @@ export async function getSolPrice(req, res) {
 
     return res.send(price);
 }
+
