@@ -15,7 +15,6 @@ export async function createUser(walletAddress: string): Promise<string | null> 
     try {
         const response = await axios.post('http://localhost:5000/create-user', options);
         const data = response.data;
-        console.log("🚀 ~ file: createUser.ts ~ line 17 ~ createUser ~ data", data)
 
         if (data) status = data;
     } catch (e) {

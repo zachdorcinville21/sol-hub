@@ -22,7 +22,7 @@ declare const window: Window &
 /**
  * Returns stateful information about a Phantom wallet along with functions to connect and disconnect.
  */
-export const useWallet = (): WalletControls => {
+export function useWallet(): WalletControls {
     const [phantom, setPhantom] = useState<Phantom | null>(null);
     const [publicKey, setKey] = useState<string | null>(null);
     const [connected, setConnected] = useState<boolean>(false);
@@ -38,7 +38,6 @@ export const useWallet = (): WalletControls => {
         let createUserStatus = null;
 
         if (result !== null) createUserStatus = await createUser(result);
-        console.log(createUserStatus)
 
         if (createUserStatus === 'OK') {
             setConnected(true);
@@ -58,7 +57,7 @@ export const useWallet = (): WalletControls => {
 
         return () => {
             (async () => {
-                phantom?.disconnect();
+                await phantom?.disconnect();
             })();
         }
     }, [phantom]);
