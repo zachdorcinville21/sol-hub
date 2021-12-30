@@ -1,0 +1,39 @@
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Messages from '../../Messages/index';
+import { Socket } from 'socket.io-client';
+
+interface ConvosProps {
+    socket: Socket | null;
+    msgObject: { [key: string]: any[] } | null;
+    walletAddr: string | null;
+}
+
+
+const Convos = ({ msgObject, socket, walletAddr }: ConvosProps) => {
+    return (
+        <div className='w-full flex flex-col'>
+            {msgObject?.convos.map((c: any, i: number) => (
+                <>
+                    <Accordion style={{ backgroundColor: '#18181b', color: 'white' }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
+                        >
+                            <div className='text-white'>{c.participants.find((p: string) => p !== walletAddr)}</div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Messages msgObject={c.messages} senderId={walletAddr!} receiverId={c.participants.find((p: string) => p !== walletAddr)} />
+                        </AccordionDetails>
+                    </Accordion>
+                    <hr style={{ border: '1px solid dimgrey' }}></hr>
+                </>
+            ))}
+        </div>
+    );
+}
+
+
+export default Convos;
+

@@ -9,7 +9,7 @@ export async function getSolPrice(req, res) {
 
         if (data) price = data;
     } catch (e) {
-        console.error(e)
+        console.error(e);
     }
 
     return res.send(price);

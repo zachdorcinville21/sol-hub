@@ -6,3 +6,16 @@ export const UserSchema = new mongoose.Schema({
     "username": "String"
 });
 
+export const ConversationSchema = new mongoose.Schema({
+    convo_id: "String",
+    participants: [String],
+    updated_at: "Date",
+    messages: [{
+        message_id: "Number",
+        author_id: "String",
+        receiver_id: "String",
+        message: "String",
+        created_at: "Date"
+    }]
+});
+

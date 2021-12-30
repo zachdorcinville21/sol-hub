@@ -15,13 +15,19 @@ const Users = mongoose.model('Model', UserSchema, 'Users');
  * An object for performing CRUD operations on a user.
  */
 export default class UserController {
+    constructor() {
+        this.onlineUsers = [];
+        this.createUser = this.createUser.bind(this);
+    }
+
     async createUser(req, res) {
         const { walletAddress } = req.body.data;
 
         const existingUser = await Users.findOne({ wallet_addr: walletAddress });
 
-        if (typeof existingUser !== 'undefined' && existingUser !== null) {
+        if (existingUser !== null) {
             console.log('user already exists.');
+            console.log(this.onlineUsers);
             return res.sendStatus(200);
         }
 
@@ -41,6 +47,14 @@ export default class UserController {
         });
 
         return res.sendStatus(res.statusCode);
+    }
+
+    async getUser(walletAddr) {
+        try {
+            return await Users.findOne({ wallet_addr: walletAddr });
+        } catch (e) {
+            throw new Error(`Unable to retreive user: ${e}`);
+        }
     }
 
     async updateUsername(req, res) {
@@ -73,6 +87,35 @@ export default class UserController {
         }
 
         return res.send({ username: username });
+    }
+
+    addOnlineUser(socketId, walletAddress, username) {
+        console.log('attempting to add');
+        if (!this.onlineUsers.some(user => user.username === username && user.wallet_addr === walletAddress)) {
+            this.onlineUsers.push({
+                socket_id: socketId,
+                wallet_addr: walletAddress, 
+                username: username,
+            });
+        }
+    }
+
+    removeOnlineUser(socketId) {
+        this.onlineUsers = this.onlineUsers.filter(user => user.socket_id !== socketId);
+    }
+
+    getOnlineUser(walletAddress) {
+        let user = null;
+
+        if (this.onlineUsers.some(user => user.wallet_addr === walletAddress && user.username !== null)) {
+            user = this.onlineUsers.find(user => user.wallet_addr === walletAddress && user.username !== null);
+        } else {
+            user = this.onlineUsers.find(user => user.wallet_addr === walletAddress);
+        }
+
+        if (!user) return null;
+
+        return user;
     }
 }
 

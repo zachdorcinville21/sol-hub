@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ConnectWalletBtn } from "../ConnectWalletBtn";
 import { useWallet } from './util/useWallet';
 import NftSlider from "../NftSlider";
@@ -8,10 +8,10 @@ import { getSolDayChange } from './util/getSolDayChange';
 import Stats from './util/Stats';
 import TopMenu from '../TopMenu';
 import { SettingsModal } from '../SettingsModal';
-import { updateUsername } from '../util/user-crud/updateUsername';
-import { getUsername } from '../util/user-crud/getUsername';
+import { MessagesModal } from '../MessagesModal';
 import { useProfileData } from '../util/hooks/useProfileData';
 import { useGreeting } from '../util/hooks/useGreeting';
+import { SocketContext } from '../context/socket';
 
 
 const SolHub = () => {
@@ -19,9 +19,12 @@ const SolHub = () => {
     const [solDayChange, setSolDayChange] = useState<string | null>(null);
     const [messagesMenuOpen, toggleMessageMenu] = useState<boolean>(false);
     const [settingsMenuOpen, toggleSettingsMenu] = useState<boolean>(false);
+    const [notificationCount, setNotifs] = useState<number>(0);
+    const [msg, setMsg] = useState<string | null>(null);
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
+    const { socket } = useContext(SocketContext);
     const greeting = useGreeting();
 
     const openMessages = () => toggleMessageMenu(true);
@@ -44,6 +47,29 @@ const SolHub = () => {
         })();
     }, []);
 
+    // useEffect(() => {
+    //     socket?.on('new-message', message => {
+    //         console.log("🚀 ~ file: index.tsx ~ line 51 ~ useEffect ~ message", message)
+    //         //alert(`new message: ${message}`);
+    //         setMsg(message);
+    //     });
+    // }, [connected]);
+
+    // useEffect(() => {
+    //     setNotifs(notificationCount + 1);
+    // }, [msg]);
+
+    useEffect(() => {
+        if (connected) {
+            socket?.emit('new-user-connected', [publicKey, username]);
+            console.log('emitted');
+        }
+
+        return () => {
+            socket?.disconnect();
+        }
+    }, [connected]);
+
     return (
         <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 gap-24 bg-gray-900'>
             <Logo />
@@ -56,6 +82,7 @@ const SolHub = () => {
             <ConnectWalletBtn onClick={!connected ? onConnectClick : onDisconnectClick} publicKey={publicKey} connected={connected} />
 
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={onSave} />
+            <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} />
         </div>
     );
 }

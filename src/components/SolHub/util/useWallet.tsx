@@ -57,7 +57,7 @@ export function useWallet(): WalletControls {
 
         return () => {
             (async () => {
-                await phantom?.disconnect();
+                await onDisconnectClick();
             })();
         }
     }, [phantom]);

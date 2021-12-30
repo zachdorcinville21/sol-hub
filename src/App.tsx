@@ -1,6 +1,11 @@
 import SolHub from './components/SolHub';
+import SocketProvider from './components/context/socket';
 import './App.css';
 
-const App = () => <SolHub />;
+const App = () => (
+    <SocketProvider>
+        <SolHub />
+    </SocketProvider>
+);
 
 export default App;
