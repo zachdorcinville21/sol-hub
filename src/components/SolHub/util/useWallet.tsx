@@ -57,7 +57,9 @@ export function useWallet(): WalletControls {
 
         return () => {
             (async () => {
-                await onDisconnectClick();
+                await phantom?.disconnect();
+                setConnected(false);
+                setKey(null);
             })();
         }
     }, [phantom]);
@@ -69,8 +71,8 @@ export function useWallet(): WalletControls {
                 'confirmed',
             );
 
-            if (phantom && phantom!.publicKey !== null) {
-                const balance = await connection.getBalance(phantom!.publicKey);
+            if (phantom && phantom.publicKey !== null) {
+                const balance = await connection.getBalance(phantom.publicKey)
                 console.log(balance);
             }
         })();

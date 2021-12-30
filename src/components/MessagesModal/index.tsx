@@ -36,7 +36,6 @@ export const MessagesModal = ({ open, handleClose, walletAddress }: MMProps) => 
         (async () => {
             try {
                 const data = await getConversations(walletAddress!);
-                console.log(data);
                 setMsgObj(data);
             } catch (e) {
                 console.error(e);

@@ -19,8 +19,6 @@ const SolHub = () => {
     const [solDayChange, setSolDayChange] = useState<string | null>(null);
     const [messagesMenuOpen, toggleMessageMenu] = useState<boolean>(false);
     const [settingsMenuOpen, toggleSettingsMenu] = useState<boolean>(false);
-    const [notificationCount, setNotifs] = useState<number>(0);
-    const [msg, setMsg] = useState<string | null>(null);
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
@@ -47,27 +45,15 @@ const SolHub = () => {
         })();
     }, []);
 
-    // useEffect(() => {
-    //     socket?.on('new-message', message => {
-    //         console.log("🚀 ~ file: index.tsx ~ line 51 ~ useEffect ~ message", message)
-    //         //alert(`new message: ${message}`);
-    //         setMsg(message);
-    //     });
-    // }, [connected]);
-
-    // useEffect(() => {
-    //     setNotifs(notificationCount + 1);
-    // }, [msg]);
-
     useEffect(() => {
         if (connected) {
             socket?.emit('new-user-connected', [publicKey, username]);
-            console.log('emitted');
         }
 
         return () => {
             socket?.disconnect();
         }
+        // eslint-disable-next-line
     }, [connected]);
 
     return (

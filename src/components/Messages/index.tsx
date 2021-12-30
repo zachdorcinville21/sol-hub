@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext } from '../context/socket/index';
 import ScrollableFeed from 'react-scrollable-feed'
 
@@ -37,9 +37,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
     }, [msgObject, receiverId]);
 
     useEffect(() => {
-        console.log(msgsToIterate)
         socket?.on('new-message', ({ message, senderWalletAddress, receiverWalletAddress }) => {
-            console.log(message)
             const newMsgs = [...msgsToIterate, {
                 message_id: msgsToIterate.length + 1,
                 author_id: senderWalletAddress,

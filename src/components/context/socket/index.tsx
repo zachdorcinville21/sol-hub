@@ -21,6 +21,7 @@ function SocketProvider({ children }: SCProviderProps) {
         return () => {
             socket?.disconnect();
         }
+        // eslint-disable-next-line
     }, []);
 
     const sd: SocketData = { socket };
