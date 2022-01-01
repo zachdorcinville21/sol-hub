@@ -7,6 +7,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { sendMessage } from './controllers/sendMessage.js';
 import { getConversations } from './controllers/getConversations.js';
+import { setVal, getVal } from './controllers/RedisController.js';
 
 const app = express();
 const server = createServer(app);
@@ -35,6 +36,10 @@ app.post('/update-username', uc.updateUsername);
 app.post('/get-username', uc.getUsername);
 
 app.post('/get-conversations', getConversations);
+
+app.post('/set-redis-val', setVal);
+
+app.post('/get-redis-val', getVal);
 
 io.on('connection', socket => {
     socket.on('new-user-connected', userInfo => {

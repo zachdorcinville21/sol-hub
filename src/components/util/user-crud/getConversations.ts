@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { Convo } from '../types/Message';
 
 
-export async function getConversations(walletAddress: string): Promise<{ [key: string]: any[] }> {
+export async function getConversations(walletAddress: string): Promise<{ [key: string]: Convo[] }> {
     let msgObjects = null;
 
     const options = {

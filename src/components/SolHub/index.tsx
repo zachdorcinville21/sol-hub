@@ -19,6 +19,7 @@ const SolHub = () => {
     const [solDayChange, setSolDayChange] = useState<string | null>(null);
     const [messagesMenuOpen, toggleMessageMenu] = useState<boolean>(false);
     const [settingsMenuOpen, toggleSettingsMenu] = useState<boolean>(false);
+    const [notifCount, setNotifCount] = useState<number>(0);
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
@@ -30,6 +31,8 @@ const SolHub = () => {
 
     const closeMessages = () => toggleMessageMenu(false);
     const closeSettings = () => toggleSettingsMenu(false);
+
+    const updateNotifCount = (val: number) => setNotifCount(prev => prev + val);
 
     useEffect(() => {
         (async () => {
@@ -59,7 +62,7 @@ const SolHub = () => {
     return (
         <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 gap-24 bg-gray-900'>
             <Logo />
-            <TopMenu onMessagesOpen={openMessages} onSettingsOpen={openSettings} />
+            <TopMenu onMessagesOpen={openMessages} onSettingsOpen={openSettings} notifCount={notifCount} updateNotifCount={updateNotifCount} />
             <div className={username === null ? 'text-white text-xl' : 'text-white text-3xl font-medium'}>
                 {username === null || username === '' ? publicKey : `${greeting}, ${username}`}
             </div>
@@ -68,7 +71,7 @@ const SolHub = () => {
             <ConnectWalletBtn onClick={!connected ? onConnectClick : onDisconnectClick} publicKey={publicKey} connected={connected} />
 
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={onSave} />
-            <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} />
+            <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
         </div>
     );
 }

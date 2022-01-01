@@ -5,17 +5,21 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { getConversations } from '../util/user-crud/getConversations';
 import Convos from './util/Convos';
+import { Convo } from '../util/types/Message';
+import { setRedisVal } from '../util/user-crud/setRedisVal';
+import { getRedisVal } from '../util/user-crud/getRedisVal';
 
 interface MMProps {
     open: boolean;
     walletAddress: string | null;
     handleClose: () => void;
+    updateNotifCount: (val: number) => void;
 }
 
-export const MessagesModal = ({ open, handleClose, walletAddress }: MMProps) => {
+export const MessagesModal = ({ open, walletAddress, handleClose, updateNotifCount }: MMProps) => {
     const [address, setAddress] = useState<string>('');
     const [msg, setMsg] = useState<string>('');
-    const [msgObject, setMsgObj] = useState<{ [key: string]: any[] } | null>(null);
+    const [msgObject, setMsgObj] = useState<{ [key: string]: Convo[] } | null>(null);
     const [showMsgForm, toggleMsgForm] = useState<boolean>(false);
 
     const { socket } = useContext(SocketContext);
@@ -36,12 +40,32 @@ export const MessagesModal = ({ open, handleClose, walletAddress }: MMProps) => 
         (async () => {
             try {
                 const data = await getConversations(walletAddress!);
+                console.log("🚀 ~ file: index.tsx ~ line 40 ~ data", data)
                 setMsgObj(data);
             } catch (e) {
                 console.error(e);
             }
         })();
     }, [walletAddress, socket]);
+
+    useEffect(() => {
+        (async () => {
+            const cachedMsgs = await getRedisVal('messages');
+
+            try {
+                if (msgObject!.convos.length > 0 && cachedMsgs === null) {
+                    await setRedisVal('messages', msgObject?.convos[0].messages);
+                } else if (msgObject!.convos.length > 0 && cachedMsgs !== null) {
+                    updateNotifCount(msgObject!.convos[0].messages.length - cachedMsgs.length);
+                    await setRedisVal('messages', null);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        })();
+
+        //eslint-disable-next-line
+    }, [msgObject]);
 
     return (
         <Modal
