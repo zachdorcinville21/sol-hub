@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { UserSchema } from '../../models/index.js';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ export default class UserController {
         const user = new Users({
             wallet_addr: walletAddress,
             username: null,
+            email: null,
         });
 
         await user.save((err, newUser) => {
@@ -65,6 +67,23 @@ export default class UserController {
             updatedUser = await Users.findOneAndUpdate({ wallet_addr: walletAddress }, {
                 $set: {
                     username: username,
+                }
+            }, { new: true });
+        } catch (e) {
+            throw new Error(e);
+        }
+
+        return res.send(updatedUser);
+    }
+
+    async updateEmail(req, res) {
+        const { email, walletAddress } = req.body.data;
+        let updatedUser = null;
+
+        try {
+            updatedUser = await Users.findOneAndUpdate({ wallet_addr: walletAddress }, {
+                $set: {
+                    email: email,
                 }
             }, { new: true });
         } catch (e) {
@@ -116,6 +135,34 @@ export default class UserController {
         if (!user) return null;
 
         return user;
+    }
+
+    async sendEmail(senderAddr, receiverAddr, message) {
+        const recipient = await Users.findOne({ wallet_addr: receiverAddr });
+        const email = recipient.email;
+
+        if (email === null) return;
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'zdorcinville@gmail.com',
+                pass: 'alienated64'
+            }
+        });
+
+        const mailOptions = {
+            from: 'zdorcinville@gmail.com',
+            to: email,
+            subject: `SolHub: new message from ${senderAddr}`,
+            text: message
+        };
+
+        try {
+            await transporter.sendMail(mailOptions);
+        } catch (e) {
+            throw new Error(e);
+        }
     }
 }
 

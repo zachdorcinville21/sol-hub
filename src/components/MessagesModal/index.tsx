@@ -8,12 +8,13 @@ import Convos from './util/Convos';
 import { Convo } from '../util/types/Message';
 import { setRedisVal } from '../util/user-crud/setRedisVal';
 import { getRedisVal } from '../util/user-crud/getRedisVal';
+import { NotifUpdateConfig } from '../SolHub/util/types';
 
 interface MMProps {
     open: boolean;
     walletAddress: string | null;
     handleClose: () => void;
-    updateNotifCount: (val: number) => void;
+    updateNotifCount: (val: number, options?: NotifUpdateConfig) => void;
 }
 
 export const MessagesModal = ({ open, walletAddress, handleClose, updateNotifCount }: MMProps) => {
@@ -40,32 +41,12 @@ export const MessagesModal = ({ open, walletAddress, handleClose, updateNotifCou
         (async () => {
             try {
                 const data = await getConversations(walletAddress!);
-                console.log("🚀 ~ file: index.tsx ~ line 40 ~ data", data)
                 setMsgObj(data);
             } catch (e) {
                 console.error(e);
             }
         })();
     }, [walletAddress, socket]);
-
-    useEffect(() => {
-        (async () => {
-            const cachedMsgs = await getRedisVal('messages');
-
-            try {
-                if (msgObject!.convos.length > 0 && cachedMsgs === null) {
-                    await setRedisVal('messages', msgObject?.convos[0].messages);
-                } else if (msgObject!.convos.length > 0 && cachedMsgs !== null) {
-                    updateNotifCount(msgObject!.convos[0].messages.length - cachedMsgs.length);
-                    await setRedisVal('messages', null);
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        })();
-
-        //eslint-disable-next-line
-    }, [msgObject]);
 
     return (
         <Modal

@@ -8,3 +8,7 @@ export interface Phantom {
     request: (params: { [key: string]: any }) => Promise<any>;
 }
 
+export interface NotifUpdateConfig {
+    type: 'set' | 'subtract';
+}
+

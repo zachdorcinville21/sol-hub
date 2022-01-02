@@ -33,6 +33,8 @@ app.post('/create-user', uc.createUser);
 
 app.post('/update-username', uc.updateUsername);
 
+app.post('/update-email', uc.updateEmail);
+
 app.post('/get-username', uc.getUsername);
 
 app.post('/get-conversations', getConversations);
@@ -56,12 +58,13 @@ io.on('connection', socket => {
         const receiver = uc.getOnlineUser(receiverWalletAddress);
 
         if (receiver !== null) {
-            console.log("🚀 ~ file: index.js ~ line 59 ~ receiverSocketId", receiver.socket_id);
             io.to(receiver.socket_id).emit('new-message', { 
                 message: message, 
                 senderWalletAddress: senderWalletAddress, 
                 receiverWalletAddress: receiverWalletAddress, 
             });
+        } else {
+            uc.sendEmail(senderWalletAddress, receiverWalletAddress, message);
         }
     });
 

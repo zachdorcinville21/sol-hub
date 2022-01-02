@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext } from '../context/socket/index';
 import ScrollableFeed from 'react-scrollable-feed'
+import { Message } from '../util/types/Message';
 
 interface MsgProps {
     msgObject: any;
@@ -10,7 +11,7 @@ interface MsgProps {
 
 
 const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
-    const [msgsToIterate, setMsgs] = useState<any[]>([]);
+    const [msgsToIterate, setMsgs] = useState<Message[]>([]);
     const [currentMsg, setCurrentMsg] = useState<string>('');
 
     const { socket } = useContext(SocketContext);
@@ -55,7 +56,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
     return (
         <div className={`w-full bg-black h-${msgContainerHeight} flex flex-col px-6 pt-4 rounded-md`}>
             <ScrollableFeed className='w-full overflow-scroll flex flex-col gap-4'>
-                {msgsToIterate?.map((m: any, i: number) => {
+                {msgsToIterate?.map((m: Message, i: number) => {
                     if (m.author_id !== senderId) {
                         return (
                             <div key={i} className='w-40 self-start bg-gray-400 text-black p-2 rounded-lg'>
@@ -71,9 +72,9 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                     }
                 })}
             </ScrollableFeed>
-            <div className='flex gap-4  bg-black bottom-0 mt-2 pb-2 sticky'>
+            <div className='flex gap-4 bg-black bottom-0 mt-2 pb-2 sticky justify-center'>
                 <input value={currentMsg} onChange={handleMsgChange} type='text' placeholder='message' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                <button onClick={sendMessage} className='m-auto p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Send</button>
+                <button onClick={sendMessage} className='p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Send</button>
             </div>
         </div>
     );

@@ -3,7 +3,14 @@ import mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
     "wallet_addr": "String",
-    "username": "String"
+    "username": {
+        type: "String",
+        default: null
+    },
+    "email": {
+        type: "String",
+        default: null
+    }
 });
 
 export const ConversationSchema = new mongoose.Schema({

@@ -6,16 +6,19 @@ interface TopMenuProps {
     onMessagesOpen: () => void;
     notifCount: number;
     updateNotifCount: (val: number) => void;
+    updateNewMsg: (msg: string) => void;
 }
 
 const TopMenu = (props: TopMenuProps) => {
     const { socket } = useContext(SocketContext);
+    const { updateNotifCount } = props;
 
     useEffect(() => {
         socket?.on('new-message', message => {
-            props.updateNotifCount(1);
+            updateNotifCount(1);
+            //props.updateNewMsg(message);
         });
-    }, [socket, props]);
+    }, [socket]);
 
     return (
         <div className='w-2/4 flex justify-between items-center gap-10 absolute top-6 py-2'>
