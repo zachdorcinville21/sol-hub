@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 interface SnackbarProps {
     open: boolean;
     message: string;
+    sender: string
     handleClose: () => void;
 }
 
@@ -13,7 +14,7 @@ const styles = makeStyles({
 	},
 });
 
-export const NotifMsg = ({ open, message, handleClose }: SnackbarProps) => {
+export const NotifMsg = ({ open, message, sender,  handleClose }: SnackbarProps) => {
     const classes = styles();
 
     return (
@@ -21,8 +22,9 @@ export const NotifMsg = ({ open, message, handleClose }: SnackbarProps) => {
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             open={open}
             onClose={handleClose}
-            message={message}
+            message={`${sender}: ${message}`}
             classes={{ root: classes.notifMsg }}
+            autoHideDuration={8000}
         />
     );
 }

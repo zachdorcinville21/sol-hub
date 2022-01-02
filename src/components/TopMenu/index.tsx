@@ -6,17 +6,18 @@ interface TopMenuProps {
     onMessagesOpen: () => void;
     notifCount: number;
     updateNotifCount: (val: number) => void;
-    updateNewMsg: (msg: string) => void;
+    updateNewMsg: (msg: string, sender: string) => void;
 }
 
 const TopMenu = (props: TopMenuProps) => {
     const { socket } = useContext(SocketContext);
-    const { updateNotifCount } = props;
+    const { updateNotifCount, updateNewMsg } = props;
 
     useEffect(() => {
-        socket?.on('new-message', message => {
+        socket?.on('new-message', ({ message, senderWalletAddress }) => {
+            console.log("🚀 ~ file: index.tsx ~ line 18 ~ socket?.on ~ message", message)
             updateNotifCount(1);
-            //props.updateNewMsg(message);
+            updateNewMsg(message, senderWalletAddress);
         });
     }, [socket]);
 

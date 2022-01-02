@@ -24,6 +24,7 @@ const SolHub = () => {
     const [notifCount, setNotifCount] = useState<number>(0);
     const [notifMsgOpen, setNotifMessage] = useState<boolean>(false);
     const [newMsg, setNewMsg] = useState<string>('');
+    const [senderWallet, setSender] = useState<string>('');
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
@@ -38,8 +39,9 @@ const SolHub = () => {
 
     const closeNotifMsg = () => setNotifMessage(false);
 
-    const updateNewMsg = (msg: string): void => {
+    const updateNewMsg = (msg: string, sender: string): void => {
         setNewMsg(msg);
+        setSender(sender);
         setNotifMessage(true);
     }
 
@@ -91,7 +93,7 @@ const SolHub = () => {
 
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={onSave} />
             <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
-            {/* <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} /> */}
+            <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} sender={senderWallet} />
         </div>
     );
 }
