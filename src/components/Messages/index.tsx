@@ -19,6 +19,10 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
     const handleMsgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentMsg(e.currentTarget.value);
     }
+    
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') sendMessage();
+    }
 
     const sendMessage = () => {
         socket?.emit('send-msg', [senderId, receiverId, currentMsg]);
@@ -73,7 +77,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                 })}
             </ScrollableFeed>
             <div className='flex gap-4 bg-black bottom-0 mt-2 pb-2 sticky justify-center'>
-                <input value={currentMsg} onChange={handleMsgChange} type='text' placeholder='message' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                <input value={currentMsg} onChange={handleMsgChange} onKeyPress={handleKeyPress} type='text' placeholder='message' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                 <button onClick={sendMessage} className='p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Send</button>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { updateUsername } from "../user-crud/updateUsername";
 interface ProfileData {
     username: string | null;
     email: string | null;
-    onSave: (username: string, email: string) => Promise<void>;
+    onSave: (username: string, email: string) => Promise<boolean>;
 }
 
 
@@ -14,16 +14,27 @@ export const useProfileData = (publicKey: string | null, walletConnected: boolea
     const [username, setUsername] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
 
-    const onSave = async (username: string, email: string) => {
-        try {
-            const newUsername = await updateUsername(publicKey, username);
-            setUsername(newUsername);
+    const onSave = async (username: string, email: string): Promise<boolean> => {
+        let success: boolean = false;
 
-            const newEmail = await updateEmail(publicKey, email);
-            setEmail(newEmail);
+        try {
+            if (username !== '') {
+                const newUsername = await updateUsername(publicKey, username);
+                setUsername(newUsername);
+            }
+
+            if (email !== '') {
+                const newEmail = await updateEmail(publicKey, email);
+                setEmail(newEmail);
+            }
+
+            success = true;
         } catch (e) {
+            success = false;
             console.error(e);
         }
+
+        return success;
     }
 
     useEffect(() => {

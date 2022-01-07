@@ -22,6 +22,8 @@ export const SettingsModal = ({ open, handleClose, onSave, walletAddress }: SMPr
         setEmail(e.currentTarget.value);
     }
 
+    const modalWidth: string = 'w-11/12 sm:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12';
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -35,8 +37,8 @@ export const SettingsModal = ({ open, handleClose, onSave, walletAddress }: SMPr
             }}
         >
             <Fade in={open}>
-                <div style={{ transform: 'translate(-50%, -50%)' }} className='rounded-md outline-none w-1/4 absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center bg-zinc-900 p-6'>
-                    <h3 className='text-white text-2xl font-medium'>Settings</h3>
+                <div style={{ transform: 'translate(-50%, -50%)' }} className={`rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center bg-zinc-900 p-6`}>
+                    <h3 className='text-white text-2xl font-medium self-start'>Profile</h3>
 
                     <input onChange={onUsernameChange} type='text' placeholder='Edit username' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                     <input onChange={onEmailChange} type='text' placeholder='Edit email address' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />

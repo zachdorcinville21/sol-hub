@@ -10,6 +10,10 @@ interface SliderProps {
 const NftSlider = ({ nfts }: SliderProps) => {
     const [nftImgs, setNftImgs] = useState<string[]>([]);
 
+    const sliderWidth: string = 'w-full md: w-9/12 xl:w-8/12';
+
+    const slidesToShow: number = window.screen.width <= 640 ? 1 : 3;
+
     useEffect(() => {
         (async () => {
             const imagePromises: Promise<string>[] = nfts!.map(async (nft: { [key: string]: any }) => {
@@ -21,9 +25,13 @@ const NftSlider = ({ nfts }: SliderProps) => {
         })();
     }, [nfts]);
 
+    useEffect(() => {
+        console.log(nftImgs);
+    }, [nftImgs]);
+
     return (
-        <div className="w-9/12 flex flex-col gap-10 justify-center items-center">
-            <div className='w-2/12 p-1 rounded-md bg-black shadow-lg shadow-cyan-500 text-center'>
+        <div className={`${sliderWidth} flex flex-col gap-10 justify-center items-center`}>
+            <div className='w-5/12 lg:w-3/12 p-1 rounded-md bg-black shadow-lg shadow-cyan-500 text-center'>
                 <div className='text-white text-lg'>Collectibles</div>
             </div>
             {nftImgs.length > 0 &&
@@ -33,7 +41,7 @@ const NftSlider = ({ nfts }: SliderProps) => {
                         {
                             resolve: slidesToShowPlugin,
                             options: {
-                                numberOfSlides: 3
+                                numberOfSlides: slidesToShow,
                             }
                         },
                         {
@@ -51,7 +59,7 @@ const NftSlider = ({ nfts }: SliderProps) => {
                 </Carousel>
             }
         </div>
-    )
+    );
 }
 
 

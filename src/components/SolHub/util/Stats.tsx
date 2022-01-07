@@ -8,8 +8,10 @@ const Stats = ({ price, change }: StatsProps) => {
     const solPrice: string = `$${parseFloat(price!).toFixed(2)}`;
     const solChange: string = negative ? `${parseFloat(change!).toFixed(2)}%` : `+${parseFloat(change!).toFixed(2)}%`;
 
+    const statsWidth: string = 'w-8/12 sm:w-6/12 md:w-5/12 lg:w-4/12 xl:w-3/12 2xl:w-2/12';
+
     return (
-        <div className='w-1/5 bg-black p-6 rounded-md gap-4 flex flex-col justify-center items-center'>
+        <div className={`${statsWidth} bg-black p-6 rounded-md gap-4 flex flex-col justify-center items-center`}>
             <div className='w-full flex flex-row justify-center items-center'>
                 <img src='https://sticnuru.sirv.com/sol-hub-imgs/solana.png' className='w-10 h-10' alt='solana' />Ï
                 <p className='text-2xl text-white font-normal flex items-center gap-2'>

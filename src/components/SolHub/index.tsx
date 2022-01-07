@@ -13,7 +13,9 @@ import { useProfileData } from '../util/hooks/useProfileData';
 import { useGreeting } from '../util/hooks/useGreeting';
 import { SocketContext } from '../context/socket';
 import { NotifUpdateConfig } from './util/types';
-import { NotifMsg } from '../util/misc/Snackbars';
+import { ChangesSavedMsg, NotifMsg } from '../util/misc/Snackbars';
+import { useAnimation } from '../util/hooks/useAnimation';
+import gsap from 'gsap';
 
 
 const SolHub = () => {
@@ -23,21 +25,35 @@ const SolHub = () => {
     const [settingsMenuOpen, toggleSettingsMenu] = useState<boolean>(false);
     const [notifCount, setNotifCount] = useState<number>(0);
     const [notifMsgOpen, setNotifMessage] = useState<boolean>(false);
+    const [changesSavedOpen, setChangesSaved] = useState<boolean>(false);
     const [newMsg, setNewMsg] = useState<string>('');
     const [senderWallet, setSender] = useState<string>('');
+    const [menuOpen, toggleMenu] = useState<boolean>(false);
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
     const { socket } = useContext(SocketContext);
+    const { leftFadeSlide, fadeIn } = useAnimation();
     const greeting = useGreeting();
 
-    const openMessages = () => toggleMessageMenu(true);
-    const openSettings = () => toggleSettingsMenu(true);
+    const openMessages = () => {
+        toggleMessageMenu(true);
+        toggleMenu(false);
+    }
+    const openSettings = () => {
+        toggleSettingsMenu(true);
+        toggleMenu(false);
+    }
 
     const closeMessages = () => toggleMessageMenu(false);
     const closeSettings = () => toggleSettingsMenu(false);
 
     const closeNotifMsg = () => setNotifMessage(false);
+    const closeSavedMsg = () => setChangesSaved(false);
+
+    const toggleMobileMenu = () => {
+        toggleMenu(!menuOpen);
+    }
 
     const updateNewMsg = (msg: string, sender: string): void => {
         setNewMsg(msg);
@@ -52,6 +68,14 @@ const SolHub = () => {
             setNotifCount(prev => prev - val);
         } else {
             setNotifCount(prev => prev + val);
+        }
+    }
+
+    const handleProfileChange = async (username: string, email: string) => {
+        const success = await onSave(username, email);
+
+        if (success) {
+            setChangesSaved(true);
         }
     }
 
@@ -72,6 +96,9 @@ const SolHub = () => {
     useEffect(() => {
         if (connected) {
             socket?.emit('new-user-connected', [publicKey, username]);
+        } else {
+            gsap.delayedCall(0.5, leftFadeSlide, ['#default-greeting']);
+            gsap.delayedCall(1.8, fadeIn, ['#connect-wallet-prompt']);
         }
 
         return () => {
@@ -80,20 +107,36 @@ const SolHub = () => {
         // eslint-disable-next-line
     }, [connected]);
 
+    const welcomeFontSize: string = 'text-2xl lg:text-3xl';
+
     return (
-        <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 gap-24 bg-gray-900'>
+        <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 px-4 gap-16 2xl:gap-24 bg-gray-900'>
             <Logo />
-            <TopMenu updateNewMsg={updateNewMsg} onMessagesOpen={openMessages} onSettingsOpen={openSettings} notifCount={notifCount} updateNotifCount={updateNotifCount} />
-            <div className={username === null ? 'text-white text-xl' : 'text-white text-3xl font-medium'}>
+            <TopMenu
+                updateNewMsg={updateNewMsg}
+                onMessagesOpen={openMessages}
+                onSettingsOpen={openSettings}
+                notifCount={notifCount}
+                updateNotifCount={updateNotifCount}
+                connected={connected}
+                onMenuClick={toggleMobileMenu}
+            />
+            {connected && <div className={username === null ? 'text-white text-xl' : 'text-white text-3xl font-medium'}>
                 {username === null || username === '' ? publicKey : `${greeting}, ${username}`}
-            </div>
+            </div>}
+            {!connected && <div className='text-center flex flex-col gap-4'>
+                <div id='default-greeting' className={`text-white opacity-0 relative right-12 ${welcomeFontSize} font-medium`}>Welcome to $SOLhub. Your personal dashboard on Solana.</div>
+                <h3 id='connect-wallet-prompt' className='text-white opacity-0 font-medium'>Connect wallet to log in.</h3>
+            </div>}
             <Stats price={solPrice} change={solDayChange} />
             {connected && <NftSlider nfts={nfts} />}
             <ConnectWalletBtn onClick={!connected ? onConnectClick : onDisconnectClick} publicKey={publicKey} connected={connected} />
 
-            <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={onSave} />
+            <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={handleProfileChange} />
             <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
             <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} sender={senderWallet} />
+            <ChangesSavedMsg open={changesSavedOpen} handleClose={closeSavedMsg}/>
+            {/* <SlideMenu toggleMenu={toggleMobileMenu} open={menuOpen} toggleMessageModal={openMessages} toggleSettingsModal={openSettings} /> */}
         </div>
     );
 }

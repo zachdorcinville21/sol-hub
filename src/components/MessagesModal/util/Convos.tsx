@@ -13,23 +13,31 @@ interface ConvosProps {
 
 
 const Convos = ({ msgObject, socket, walletAddr }: ConvosProps) => {
+    const screenWidth: number = window.screen.width;
+    const addrSliceIdx: number | undefined = screenWidth <= 640 ? 6 : undefined;
+
     return (
         <div className='w-full flex flex-col'>
-            {msgObject?.convos.map((c: any, i: number) => (
-                <>
-                    <Accordion style={{ backgroundColor: '#18181b', color: 'white' }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
-                        >
-                            <div className='text-white'>{c.participants.find((p: string) => p !== walletAddr)}</div>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Messages msgObject={c.messages} senderId={walletAddr!} receiverId={c.participants.find((p: string) => p !== walletAddr)} />
-                        </AccordionDetails>
-                    </Accordion>
-                    <hr style={{ border: '1px solid dimgrey' }}></hr>
-                </>
-            ))}
+            {msgObject?.convos.map((c: any, i: number) => {
+                const p = addrSliceIdx ? `${c.participants.find((p: string) => p !== walletAddr).slice(0, addrSliceIdx)}...` : 
+                                            c.participants.find((p: string) => p !== walletAddr);
+
+                return (
+                    <>
+                        <Accordion style={{ backgroundColor: '#18181b', color: 'white' }}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
+                            >
+                                <div className='text-white'>{p}</div>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Messages msgObject={c.messages} senderId={walletAddr!} receiverId={c.participants.find((p: string) => p !== walletAddr)} />
+                            </AccordionDetails>
+                        </Accordion>
+                        <hr style={{ border: '1px solid dimgrey' }}></hr>
+                    </>
+                )
+            })}
         </div>
     );
 }
