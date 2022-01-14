@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { ConnectWalletBtn } from "../ConnectWalletBtn";
 import { useWallet } from './util/useWallet';
 import NftSlider from "../NftSlider";
@@ -18,7 +18,7 @@ import { useAnimation } from '../util/hooks/useAnimation';
 import gsap from 'gsap';
 
 
-const SolHub = () => {
+function SolHub() {
     const [solPrice, setSolPrice] = useState<string | null>(null);
     const [solDayChange, setSolDayChange] = useState<string | null>(null);
     const [messagesMenuOpen, toggleMessageMenu] = useState<boolean>(false);
@@ -55,13 +55,13 @@ const SolHub = () => {
         toggleMenu(!menuOpen);
     }
 
-    const updateNewMsg = (msg: string, sender: string): void => {
+    const updateNewMsg = useCallback((msg: string, sender: string): void => {
         setNewMsg(msg);
         setSender(sender);
         setNotifMessage(true);
-    }
+    }, []);
 
-    const updateNotifCount = (val: number, options?: NotifUpdateConfig) => {
+    const updateNotifCount = useCallback((val: number, options?: NotifUpdateConfig) => {
         if (options && options.type === 'set') {
             setNotifCount(val);
         } else if (options && options.type === 'subtract') {
@@ -69,7 +69,7 @@ const SolHub = () => {
         } else {
             setNotifCount(prev => prev + val);
         }
-    }
+    }, []);
 
     const handleProfileChange = async (username: string, email: string) => {
         const success = await onSave(username, email);
@@ -77,6 +77,12 @@ const SolHub = () => {
         if (success) {
             setChangesSaved(true);
         }
+    }
+
+    const handleDisconnect = async () => {
+        console.log('disconnecting..')
+        socket?.emit('walletDisconnect');
+        await onDisconnectClick();
     }
 
     useEffect(() => {
@@ -94,17 +100,22 @@ const SolHub = () => {
     }, []);
 
     useEffect(() => {
-        if (connected) {
-            socket?.emit('new-user-connected', [publicKey, username]);
+        if (!connected) {
+            return;
         } else {
+            console.log('connecting..')
+            socket?.timeout(5000).emit('new-user-connected', { walletAddress: publicKey, username: username }, (err: any) => {
+                console.log('in emitter...')
+                if (err) console.log(err);
+            });
+        }
+    }, [connected]);
+
+    useEffect(() => {
+        if (!connected) {
             gsap.delayedCall(0.5, leftFadeSlide, ['#default-greeting']);
             gsap.delayedCall(1.8, fadeIn, ['#connect-wallet-prompt']);
         }
-
-        return () => {
-            socket?.disconnect();
-        }
-        // eslint-disable-next-line
     }, [connected]);
 
     const welcomeFontSize: string = 'text-2xl lg:text-3xl';
@@ -124,19 +135,21 @@ const SolHub = () => {
             {connected && <div className={username === null ? 'text-white text-xl' : 'text-white text-3xl font-medium'}>
                 {username === null || username === '' ? publicKey : `${greeting}, ${username}`}
             </div>}
+
             {!connected && <div className='text-center flex flex-col gap-4'>
                 <div id='default-greeting' className={`text-white opacity-0 relative right-12 ${welcomeFontSize} font-medium`}>Welcome to $SOLhub. Your personal dashboard on Solana.</div>
                 <h3 id='connect-wallet-prompt' className='text-white opacity-0 font-medium'>Connect wallet to log in.</h3>
             </div>}
+
             <Stats price={solPrice} change={solDayChange} />
             {connected && <NftSlider nfts={nfts} />}
-            <ConnectWalletBtn onClick={!connected ? onConnectClick : onDisconnectClick} publicKey={publicKey} connected={connected} />
+            <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={handleProfileChange} />
-            <MessagesModal open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
+            <MessagesModal newMsg={newMsg} open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
+
             <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} sender={senderWallet} />
-            <ChangesSavedMsg open={changesSavedOpen} handleClose={closeSavedMsg}/>
-            {/* <SlideMenu toggleMenu={toggleMobileMenu} open={menuOpen} toggleMessageModal={openMessages} toggleSettingsModal={openSettings} /> */}
+            <ChangesSavedMsg open={changesSavedOpen} handleClose={closeSavedMsg} />
         </div>
     );
 }

@@ -16,12 +16,7 @@ function SocketProvider({ children }: SCProviderProps) {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        setSocket(io('http://localhost:5000'));
-
-        return () => {
-            socket?.disconnect();
-        }
-        // eslint-disable-next-line
+        setSocket(io('http://localhost:5000', { multiplex: false })); 
     }, []);
 
     const sd: SocketData = { socket };

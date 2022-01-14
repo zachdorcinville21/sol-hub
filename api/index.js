@@ -39,16 +39,20 @@ app.post('/get-username', uc.getUsername);
 app.post('/get-conversations', getConversations);
 
 io.on('connection', socket => {
-    socket.on('new-user-connected', userInfo => {
-        const [walletAddress, username] = userInfo;
+    console.log('socket connected');
+    socket.on('new-user-connected', ({ walletAddress, username }, callback) => {
         console.log('user joined');
         uc.addOnlineUser(socket.id, walletAddress, username);
         console.log(uc.onlineUsers);
+
+        callback({
+            status: 'ok'
+        });
     });
 
-    socket.on('send-msg', data => {
+    socket.on('send-msg', async data => {
         const [senderWalletAddress, receiverWalletAddress, message] = data;
-        sendMessage(senderWalletAddress, receiverWalletAddress, message);
+        await sendMessage(senderWalletAddress, receiverWalletAddress, message);
 
         const receiver = uc.getOnlineUser(receiverWalletAddress);
 
@@ -59,15 +63,18 @@ io.on('connection', socket => {
                 receiverWalletAddress: receiverWalletAddress, 
             });
         } else {
-            uc.sendEmail(senderWalletAddress, receiverWalletAddress, message);
+            await uc.sendEmail(senderWalletAddress, receiverWalletAddress, message);
         }
     });
 
-    socket.on('disconnect', () => {
-        console.log(uc.onlineUsers);
-        console.log('user left')
+    socket.on('walletDisconnect', () => {
+        console.log('user left');
         uc.removeOnlineUser(socket.id);
-        console.log(uc.onlineUsers);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('socket disconnected');
+        uc.removeOnlineUser(socket.id);
     });
 });
 

@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Messages from '../../Messages/index';
 import { Socket } from 'socket.io-client';
+import React from 'react';
 
 interface ConvosProps {
     socket: Socket | null;
@@ -23,7 +24,7 @@ const Convos = ({ msgObject, socket, walletAddr }: ConvosProps) => {
                                             c.participants.find((p: string) => p !== walletAddr);
 
                 return (
-                    <>
+                    <React.Fragment key={i}>
                         <Accordion style={{ backgroundColor: '#18181b', color: 'white' }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
@@ -35,7 +36,7 @@ const Convos = ({ msgObject, socket, walletAddr }: ConvosProps) => {
                             </AccordionDetails>
                         </Accordion>
                         <hr style={{ border: '1px solid dimgrey' }}></hr>
-                    </>
+                    </React.Fragment>
                 )
             })}
         </div>

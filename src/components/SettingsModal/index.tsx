@@ -41,7 +41,7 @@ export const SettingsModal = ({ open, handleClose, onSave, walletAddress }: SMPr
                     <h3 className='text-white text-2xl font-medium self-start'>Profile</h3>
 
                     <input onChange={onUsernameChange} type='text' placeholder='Edit username' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                    <input onChange={onEmailChange} type='text' placeholder='Edit email address' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                    <input onChange={onEmailChange} type='text' placeholder='Email for offline notifications' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                     <button onClick={() => onSave(username, email)} className='m-auto p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Save</button>
                 </div>
             </Fade>

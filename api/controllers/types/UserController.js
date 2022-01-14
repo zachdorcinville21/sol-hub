@@ -109,7 +109,6 @@ export default class UserController {
     }
 
     addOnlineUser(socketId, walletAddress, username) {
-        console.log('attempting to add');
         if (!this.onlineUsers.some(user => user.username === username && user.wallet_addr === walletAddress)) {
             this.onlineUsers.push({
                 socket_id: socketId,
@@ -121,6 +120,7 @@ export default class UserController {
 
     removeOnlineUser(socketId) {
         this.onlineUsers = this.onlineUsers.filter(user => user.socket_id !== socketId);
+        console.log(this.onlineUsers)
     }
 
     getOnlineUser(walletAddress) {

@@ -1,4 +1,3 @@
-
 export function getPhantomProvider() {
     if ("solana" in window) {
         const provider = window.solana;
@@ -8,6 +7,8 @@ export function getPhantomProvider() {
         } else {
             return null;
         }
+    } else {
+        return null;
     }
 }
 

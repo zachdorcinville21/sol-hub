@@ -13,20 +13,28 @@ interface NotifMsgProps extends SnackbarProps {
 }
 
 const styles = makeStyles({
-	notifMsg: {
-		backgroundColor: "black",
-	},
+    notifMsg: {
+        backgroundColor: "black",
+        color: 'steelblue',
+    },
 });
 
 export const NotifMsg = ({ open, message, sender, handleClose }: NotifMsgProps) => {
     const classes = styles();
+
+    const msg: JSX.Element = (
+        <div className='text-white'>
+            <span className='text-blue-400 mr-1'>{`${sender.slice(0, 10)}...:`}</span>
+            {message}
+        </div>
+    )
 
     return (
         <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             open={open}
             onClose={handleClose}
-            message={`${sender.slice(0, 10)}...: ${message}`}
+            message={msg}
             classes={{ root: classes.notifMsg }}
             autoHideDuration={8000}
         />

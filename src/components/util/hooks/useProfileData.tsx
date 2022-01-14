@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUsername } from "../user-crud/getUsername";
-import { updateEmail } from '../user-crud/updateEmail';
-import { updateUsername } from "../user-crud/updateUsername";
+import { uc } from '../user-crud/index';
 
 interface ProfileData {
     username: string | null;
@@ -19,12 +17,12 @@ export const useProfileData = (publicKey: string | null, walletConnected: boolea
 
         try {
             if (username !== '') {
-                const newUsername = await updateUsername(publicKey, username);
+                const newUsername = await uc.updateUsername(publicKey, username);
                 setUsername(newUsername);
             }
 
             if (email !== '') {
-                const newEmail = await updateEmail(publicKey, email);
+                const newEmail = await uc.updateEmail(publicKey, email);
                 setEmail(newEmail);
             }
 
@@ -40,7 +38,7 @@ export const useProfileData = (publicKey: string | null, walletConnected: boolea
     useEffect(() => {
         (async () => {
             try {
-                const usernameFromDb = await getUsername(publicKey);
+                const usernameFromDb = await uc.getUsername(publicKey);
                 setUsername(usernameFromDb);
             } catch (e) {
                 console.error(e);

@@ -34,6 +34,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
             message: currentMsg,
             created_at: new Date(),
         }]);
+        
         setCurrentMsg('');
     }
 

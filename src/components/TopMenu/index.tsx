@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useCallback } from "react";
 import { SocketContext } from '../context/socket/index';
 import { NotifUpdateConfig } from "../SolHub/util/types";
 import Menu from '@mui/material/Menu';
@@ -58,11 +58,10 @@ const TopMenu = (props: TopMenuProps) => {
 
     useEffect(() => {
         socket?.on('new-message', ({ message, senderWalletAddress }) => {
-            console.log("🚀 ~ file: index.tsx ~ line 18 ~ socket?.on ~ message", message)
             updateNotifCount(1);
             updateNewMsg(message, senderWalletAddress);
         });
-    }, [socket]);
+    }, [socket, updateNotifCount, updateNewMsg]);
 
     const menuButtonStyle: string = !connected ? 'w-8 h-8 cursor-pointer opacity-50 pointer-events-none' :
         'w-8 h-8 cursor-pointer hover:opacity-50';
@@ -84,7 +83,7 @@ const TopMenu = (props: TopMenuProps) => {
             )}
 
             {window.screen.width < 1440 && (
-                <img onClick={handleMenuClick} className={`${menuButtonStyle} m-auto`} src='https://sticnuru.sirv.com/sol-hub-imgs/option.png' />
+                <img onClick={handleMenuClick} className={`${menuButtonStyle} m-auto`} src='https://sticnuru.sirv.com/sol-hub-imgs/option.png' alt='menu-button' />
             )}
             <Menu
                 id="basic-menu"

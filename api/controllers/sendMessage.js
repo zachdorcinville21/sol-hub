@@ -13,12 +13,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 const Conversations = mongoose.model('Conversations', ConversationSchema);
 
 export async function sendMessage(senderWalletAddress, receiverWalletAddress, message) {
-    const potentialCurrentConvo = await Conversations.findOne({ participants: { $in: [senderWalletAddress, receiverWalletAddress] } });
+    const potentialCurrentConvo = await Conversations.findOne({ participants: { $all: [senderWalletAddress, receiverWalletAddress] } });
 
     if (potentialCurrentConvo !== null) {
         try {
             const messagesLength = potentialCurrentConvo.messages.length;
-            await Conversations.findOneAndUpdate({ participants: { $in: [senderWalletAddress, receiverWalletAddress] } }, {
+            await Conversations.findOneAndUpdate({ participants: { $all: [senderWalletAddress, receiverWalletAddress] } }, {
                 $push: {
                     messages: {
                         message_id: messagesLength + 1,

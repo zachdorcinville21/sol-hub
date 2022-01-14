@@ -3,23 +3,25 @@ import { SocketContext } from '../context/socket';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { getConversations } from '../util/user-crud/getConversations';
 import Convos from './util/Convos';
 import { Convo } from '../util/types/Message';
 import { NotifUpdateConfig } from '../SolHub/util/types';
+import { uc } from '../util/user-crud/index';
 
 interface MMProps {
     open: boolean;
     walletAddress: string | null;
+    newMsg: string;
     handleClose: () => void;
     updateNotifCount: (val: number, options?: NotifUpdateConfig) => void;
 }
 
-export const MessagesModal = ({ open, walletAddress, handleClose, updateNotifCount }: MMProps) => {
+export const MessagesModal = ({ open, walletAddress, newMsg, handleClose, updateNotifCount }: MMProps) => {
     const [address, setAddress] = useState<string>('');
     const [msg, setMsg] = useState<string>('');
     const [msgObject, setMsgObj] = useState<{ [key: string]: Convo[] } | null>(null);
     const [showMsgForm, toggleMsgForm] = useState<boolean>(false);
+    const [msgReceived, setReceived] = useState<boolean>(false);
 
     const { socket } = useContext(SocketContext);
 
@@ -36,15 +38,23 @@ export const MessagesModal = ({ open, walletAddress, handleClose, updateNotifCou
     }
 
     useEffect(() => {
+        socket?.on('new-message', () => {
+            setReceived(true);
+        });
+    }, [socket]);
+
+    useEffect(() => {
         (async () => {
+            console.log('fetching convos..')
             try {
-                const data = await getConversations(walletAddress!);
+                const data = await uc.getConversations(walletAddress!);
+                console.log(data);
                 setMsgObj(data);
             } catch (e) {
                 console.error(e);
             }
         })();
-    }, [walletAddress, socket]);
+    }, [walletAddress, newMsg]);
 
     const modalWidth: string = 'w-11/12 sm:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12';
     const newInputWidth: string = 'w-28 sm:w-36 md:w-44 xl:w-52';
