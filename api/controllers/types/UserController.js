@@ -27,8 +27,7 @@ export default class UserController {
         const existingUser = await Users.findOne({ wallet_addr: walletAddress });
 
         if (existingUser !== null) {
-            console.log('user already exists.');
-            console.log(this.onlineUsers);
+            console.log('existing user returned');
             return res.sendStatus(200);
         }
 

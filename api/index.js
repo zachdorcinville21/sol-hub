@@ -2,11 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { getSolPrice } from './controllers/getSolPrice.js';
 import { getSolDayChange } from './controllers/getSolDayChange.js';
-import UserController from './controllers/types/UserController.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { sendMessage } from './controllers/sendMessage.js';
-import { getConversations } from './controllers/getConversations.js';
+import UserController from './controllers/types/UserController.js';
+import ConvoFactory from './controllers/types/ConvoFactory.js';
 
 const app = express();
 const server = createServer(app);
@@ -23,6 +22,7 @@ const io = new Server(server, {
 const PORT = 5000;
 
 const uc = new UserController();
+const cf = new ConvoFactory();
 
 app.get('/sol-price', getSolPrice);
 
@@ -36,23 +36,19 @@ app.post('/update-email', uc.updateEmail);
 
 app.post('/get-username', uc.getUsername);
 
-app.post('/get-conversations', getConversations);
+app.post('/get-conversations', cf.getConversations);
+
+app.post('/delete-conversation', cf.deleteConversation);
 
 io.on('connection', socket => {
-    console.log('socket connected');
     socket.on('new-user-connected', ({ walletAddress, username }, callback) => {
         console.log('user joined');
         uc.addOnlineUser(socket.id, walletAddress, username);
-        console.log(uc.onlineUsers);
-
-        callback({
-            status: 'ok'
-        });
     });
 
     socket.on('send-msg', async data => {
         const [senderWalletAddress, receiverWalletAddress, message] = data;
-        await sendMessage(senderWalletAddress, receiverWalletAddress, message);
+        await cf.sendMessage(senderWalletAddress, receiverWalletAddress, message);
 
         const receiver = uc.getOnlineUser(receiverWalletAddress);
 
@@ -73,7 +69,6 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        console.log('socket disconnected');
         uc.removeOnlineUser(socket.id);
     });
 });
