@@ -9,7 +9,6 @@ interface MsgProps {
     receiverId: string;
 }
 
-
 const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
     const [msgsToIterate, setMsgs] = useState<Message[]>([]);
     const [currentMsg, setCurrentMsg] = useState<string>('');
@@ -34,7 +33,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
             message: currentMsg,
             created_at: new Date(),
         }]);
-        
+
         setCurrentMsg('');
     }
 
@@ -44,7 +43,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
 
     useEffect(() => {
         socket?.on('new-message', ({ message, senderWalletAddress, receiverWalletAddress }) => {
-            const newMsgs = [...msgsToIterate, {
+            const newMsgs: Message[] = [...msgsToIterate, {
                 message_id: msgsToIterate.length + 1,
                 author_id: senderWalletAddress,
                 receiver_id: receiverWalletAddress,

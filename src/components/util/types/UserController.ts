@@ -81,5 +81,23 @@ export default class UserController extends APIQuery {
 
         return msgObjects;
     }
+
+    async deleteConversation(senderWallet: string | null, receiverWallet: string | null): Promise<string> {
+        let status = null;
+
+        const options = {
+            method: 'POST',
+            data: { senderWallet: senderWallet, receiverWallet: receiverWallet },
+        };
+
+        try {
+            const response = await axios.post(this.deleteConvoRoute, options);
+            if (response) status = response.data;
+        } catch (e) {
+            console.error(e);
+        }
+
+        return status;
+    }
 }
 

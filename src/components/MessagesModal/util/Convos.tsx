@@ -4,7 +4,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Messages from '../../Messages/index';
 import { Socket } from 'socket.io-client';
-import React from 'react';
+import { uc } from '../../util/user-crud';
+import React, { useEffect, useState } from 'react';
+import { Convo } from '../../util/types/Message';
 
 interface ConvosProps {
     socket: Socket | null;
@@ -13,29 +15,44 @@ interface ConvosProps {
 }
 
 
-const Convos = ({ msgObject, socket, walletAddr }: ConvosProps) => {
+const Convos = ({ msgObject, walletAddr }: ConvosProps) => {
+    const [convos, setConvos] = useState<Convo[] | undefined>(msgObject?.convos);
     const screenWidth: number = window.screen.width;
     const addrSliceIdx: number | undefined = screenWidth <= 640 ? 6 : undefined;
 
+    const onDelete = async (e: React.MouseEvent<HTMLImageElement>, senderWallet: string | null, receiverWallet: string) => {
+        e.stopPropagation();
+        await uc.deleteConversation(senderWallet, receiverWallet);
+        const newConvos = convos?.filter((c: Convo) => !c.participants.includes(receiverWallet));
+        setConvos(newConvos);
+    }
+
+    useEffect(() => {
+        setConvos(msgObject?.convos);
+    }, [msgObject]);
+
     return (
-        <div className='w-full flex flex-col'>
-            {msgObject?.convos.map((c: any, i: number) => {
-                const p = addrSliceIdx ? `${c.participants.find((p: string) => p !== walletAddr).slice(0, addrSliceIdx)}...` : 
+        <div className='w-full flex flex-col gap-3'>
+            {convos?.map((c: any, i: number) => {
+                const p: string = addrSliceIdx ? `${c.participants.find((p: string) => p !== walletAddr).slice(0, addrSliceIdx)}...` : 
                                             c.participants.find((p: string) => p !== walletAddr);
+
+                const receiver: string = c.participants.find((p: string) => p !== walletAddr); 
 
                 return (
                     <React.Fragment key={i}>
-                        <Accordion style={{ backgroundColor: '#18181b', color: 'white' }}>
+                        <Accordion className='text-white rounded-2xl' style={{ backgroundColor: '#18181b', color: 'white', boxShadow: '0 0 12px black' }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
+                                style={{ display: 'flex', alignItems: 'center' }}
                             >
+                                <img onClick={(e) => onDelete(e, walletAddr, receiver)} src='https://sticnuru.sirv.com/sol-hub-imgs/delete.png' alt='delete-icon' className='w-5 h-5 mr-4 mt-0.5 hover:opacity-50' />
                                 <div className='text-white'>{p}</div>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Messages msgObject={c.messages} senderId={walletAddr!} receiverId={c.participants.find((p: string) => p !== walletAddr)} />
                             </AccordionDetails>
                         </Accordion>
-                        <hr style={{ border: '1px solid dimgrey' }}></hr>
                     </React.Fragment>
                 )
             })}

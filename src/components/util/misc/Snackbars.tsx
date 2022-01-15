@@ -51,3 +51,13 @@ export const ChangesSavedMsg = ({ open, handleClose }: SnackbarProps) => {
     );
 }
 
+export const MsgSentAlert = ({ open, handleClose }: SnackbarProps) => {
+    return (
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Alert onClose={handleClose} severity='success' variant='filled'>
+                Message sent. A conversation will appear when they reply.
+            </Alert>
+        </Snackbar>
+    );
+}
+

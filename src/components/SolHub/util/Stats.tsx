@@ -5,8 +5,8 @@ interface StatsProps {
 
 const Stats = ({ price, change }: StatsProps) => {
     const negative: boolean = change !== null && change.includes('-');
-    const solPrice: string = `$${parseFloat(price!).toFixed(2)}`;
-    const solChange: string = negative ? `${parseFloat(change!).toFixed(2)}%` : `+${parseFloat(change!).toFixed(2)}%`;
+    const solPrice: string = price !== null ? `$${parseFloat(price!).toFixed(2)}` : '';
+    const solChange: string = change !== null ? (negative ? `${parseFloat(change!).toFixed(2)}%` : `+${parseFloat(change!).toFixed(2)}%`) : '';
 
     const statsWidth: string = 'w-8/12 sm:w-6/12 md:w-5/12 lg:w-4/12 xl:w-3/12 2xl:w-2/12';
 

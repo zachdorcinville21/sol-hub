@@ -3,6 +3,7 @@ abstract class APIQuery {
     private _updateUsernameRoute: string = 'http://localhost:5000/update-username';
     private _updateEmailRoute: string = 'http://localhost:5000/update-email';
     private _getConvosRoute: string = 'http://localhost:5000/get-conversations';
+    private _deleteConvoRoute: string = 'http://localhost:5000/delete-conversation';
 
     public get getUsernameRoute(): string {
         return this._getUsernameRoute;
@@ -18,6 +19,10 @@ abstract class APIQuery {
 
     public get getConvosRoute(): string {
         return this._getConvosRoute;
+    }
+
+    public get deleteConvoRoute(): string {
+        return this._deleteConvoRoute;
     }
 }
 

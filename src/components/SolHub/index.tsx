@@ -13,7 +13,7 @@ import { useProfileData } from '../util/hooks/useProfileData';
 import { useGreeting } from '../util/hooks/useGreeting';
 import { SocketContext } from '../context/socket';
 import { NotifUpdateConfig } from './util/types';
-import { ChangesSavedMsg, NotifMsg } from '../util/misc/Snackbars';
+import { ChangesSavedMsg, MsgSentAlert, NotifMsg } from '../util/misc/Snackbars';
 import { useAnimation } from '../util/hooks/useAnimation';
 import gsap from 'gsap';
 
@@ -29,6 +29,7 @@ function SolHub() {
     const [newMsg, setNewMsg] = useState<string>('');
     const [senderWallet, setSender] = useState<string>('');
     const [menuOpen, toggleMenu] = useState<boolean>(false);
+    const [msgSentOpen, setSentOpen] = useState<boolean>(false);
 
     const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
@@ -50,6 +51,9 @@ function SolHub() {
 
     const closeNotifMsg = () => setNotifMessage(false);
     const closeSavedMsg = () => setChangesSaved(false);
+
+    const openSentAlert = () => setSentOpen(true);
+    const closeSentMsg = () => setSentOpen(false);
 
     const toggleMobileMenu = () => {
         toggleMenu(!menuOpen);
@@ -103,11 +107,7 @@ function SolHub() {
         if (!connected) {
             return;
         } else {
-            console.log('connecting..')
-            socket?.timeout(5000).emit('new-user-connected', { walletAddress: publicKey, username: username }, (err: any) => {
-                console.log('in emitter...')
-                if (err) console.log(err);
-            });
+            socket?.emit('new-user-connected', { walletAddress: publicKey, username: username });
         }
     }, [connected]);
 
@@ -132,8 +132,8 @@ function SolHub() {
                 connected={connected}
                 onMenuClick={toggleMobileMenu}
             />
-            {connected && <div className={username === null ? 'text-white text-xl' : 'text-white text-3xl font-medium'}>
-                {username === null || username === '' ? publicKey : `${greeting}, ${username}`}
+            {connected && <div className={username === null ? 'text-white text-xl text-center' : 'text-white text-3xl font-medium text-center'}>
+                {username === null || username === '' ? `${publicKey?.slice(0, 12)}...` : `${greeting}, ${username}`}
             </div>}
 
             {!connected && <div className='text-center flex flex-col gap-4'>
@@ -146,10 +146,11 @@ function SolHub() {
             <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={handleProfileChange} />
-            <MessagesModal newMsg={newMsg} open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
+            <MessagesModal openSentAlert={openSentAlert} newMsg={newMsg} open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
 
             <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} sender={senderWallet} />
             <ChangesSavedMsg open={changesSavedOpen} handleClose={closeSavedMsg} />
+            <MsgSentAlert open={msgSentOpen} handleClose={closeSentMsg} />
         </div>
     );
 }
