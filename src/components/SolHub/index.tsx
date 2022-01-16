@@ -109,13 +109,14 @@ function SolHub() {
         } else {
             socket?.emit('new-user-connected', { walletAddress: publicKey, username: username });
         }
-    }, [connected]);
+    }, [connected, socket, username, publicKey]);
 
     useEffect(() => {
         if (!connected) {
             gsap.delayedCall(0.5, leftFadeSlide, ['#default-greeting']);
             gsap.delayedCall(1.8, fadeIn, ['#connect-wallet-prompt']);
         }
+        //eslint-disable-next-line
     }, [connected]);
 
     const welcomeFontSize: string = 'text-2xl lg:text-3xl';

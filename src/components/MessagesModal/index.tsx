@@ -22,6 +22,7 @@ export const MessagesModal = ({ open, walletAddress, newMsg, handleClose, openSe
     const [msg, setMsg] = useState<string>('');
     const [msgObject, setMsgObj] = useState<{ [key: string]: Convo[] } | null>(null);
     const [showMsgForm, toggleMsgForm] = useState<boolean>(false);
+    // eslint-disable-next-line
     const [msgSent, setSent] = useState<boolean>(false);
 
     const { socket } = useContext(SocketContext);

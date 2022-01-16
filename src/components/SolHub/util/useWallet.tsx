@@ -1,12 +1,10 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { connectToWallet } from '../util/connectToWallet';
 import { createUser } from './createUser';
 import { Phantom } from './types';
 import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
 import * as solanaWeb3 from '@solana/web3.js';
 import { getPhantomProvider } from './getPhantomProvider';
-import socket, { SocketContext } from '../../context/socket';
-import { useProfileData } from '../../util/hooks/useProfileData';
 
 interface WalletControls {
     nfts: Array<{ [key: string]: any }> | null;
@@ -63,8 +61,8 @@ export function useWallet(): WalletControls {
 
     useEffect(() => {
         if (publicKey !== null && phantom !== null) {
-            //const key = phantom?.publicKey.toString();
-            const pk = new solanaWeb3.PublicKey('C8uTuzskKoyk5kWwGoc78eFW18D6CoBtsT9ArvTSfqzU');
+            const key = phantom?.publicKey.toString();
+            const pk = new solanaWeb3.PublicKey(key);
 
             (async () => {
                 const connection = new solanaWeb3.Connection(

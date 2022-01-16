@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, useCallback } from "react";
+import { useEffect, useContext, useState } from "react";
 import { SocketContext } from '../context/socket/index';
 import { NotifUpdateConfig } from "../SolHub/util/types";
 import Menu from '@mui/material/Menu';
