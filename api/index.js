@@ -24,24 +24,24 @@ const PORT = 5000;
 const uc = new UserController();
 const cf = new ConvoFactory();
 
-app.get('/sol-price', getSolPrice);
+app.get('/api/sol-price', getSolPrice);
 
-app.get('/sol-day-change', getSolDayChange);
+app.get('/api/sol-day-change', getSolDayChange);
 
-app.post('/create-user', uc.createUser);
+app.post('/api/create-user', uc.createUser);
 
-app.post('/update-username', uc.updateUsername);
+app.post('/api/update-username', uc.updateUsername);
 
-app.post('/update-email', uc.updateEmail);
+app.post('/api/update-email', uc.updateEmail);
 
-app.post('/get-username', uc.getUsername);
+app.post('/api/get-username', uc.getUsername);
 
-app.post('/get-conversations', cf.getConversations);
+app.post('/api/get-conversations', cf.getConversations);
 
-app.post('/delete-conversation', cf.deleteConversation);
+app.post('/api/delete-conversation', cf.deleteConversation);
 
 io.on('connection', socket => {
-    socket.on('new-user-connected', ({ walletAddress, username }, callback) => {
+    socket.on('new-user-connected', ({ walletAddress, username }) => {
         console.log('user joined');
         uc.addOnlineUser(socket.id, walletAddress, username);
     });

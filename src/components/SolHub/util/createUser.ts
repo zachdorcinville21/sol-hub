@@ -13,7 +13,7 @@ export async function createUser(walletAddress: string): Promise<string | null> 
     };
 
     try {
-        const response = await axios.post('http://localhost:5000/create-user', options);
+        const response = await axios.post('https://solhub.app/api/create-user', options);
         const data = response.data;
 
         if (data) status = data;

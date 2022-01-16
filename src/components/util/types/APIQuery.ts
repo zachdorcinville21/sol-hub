@@ -1,9 +1,9 @@
 abstract class APIQuery {
-    private _getUsernameRoute: string = 'http://localhost:5000/get-username';
-    private _updateUsernameRoute: string = 'http://localhost:5000/update-username';
-    private _updateEmailRoute: string = 'http://localhost:5000/update-email';
-    private _getConvosRoute: string = 'http://localhost:5000/get-conversations';
-    private _deleteConvoRoute: string = 'http://localhost:5000/delete-conversation';
+    private _getUsernameRoute: string = 'https://solhub.app/api/get-username';
+    private _updateUsernameRoute: string = 'https://solhub.app/api/update-username';
+    private _updateEmailRoute: string = 'https://solhub.app/api/update-email';
+    private _getConvosRoute: string = 'https://solhub.app/api/get-conversations';
+    private _deleteConvoRoute: string = 'https://solhub.app/api/delete-conversation';
 
     public get getUsernameRoute(): string {
         return this._getUsernameRoute;
