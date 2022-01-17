@@ -17,6 +17,7 @@ const io = new Server(server, {
     cors: {
         origin: '*',
     },
+    path: '/api',
 });
 
 const PORT = 5000;
