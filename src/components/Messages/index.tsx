@@ -59,7 +59,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
 
     return (
         <div className={`w-full bg-black h-${msgContainerHeight} flex flex-col px-6 pt-4 rounded-md`}>
-            <ScrollableFeed className='w-full overflow-scroll flex flex-col gap-4'>
+            <ScrollableFeed className='w-full flex flex-col gap-4'>
                 {msgsToIterate?.map((m: Message, i: number) => {
                     if (m.author_id !== senderId) {
                         return (
@@ -69,7 +69,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                         );
                     } else {
                         return (
-                            <div key={i} className='w-40 self-end bg-blue-800 text-white p-2 rounded-lg'>
+                            <div key={i} className='w-40 self-end bg-blue-800 text-white p-2 rounded-lg' style={{ overflowWrap: 'break-word' }}>
                                 {m.message}
                             </div>
                         );
