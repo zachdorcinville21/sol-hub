@@ -16,7 +16,7 @@ function SocketProvider({ children }: SCProviderProps) {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        setSocket(io('https://solhub.app', { multiplex: false })); 
+        setSocket(io('https://solhub.app/')); 
     }, []);
 
     const sd: SocketData = { socket };
