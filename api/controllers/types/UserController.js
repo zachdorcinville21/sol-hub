@@ -146,7 +146,7 @@ export default class UserController {
             service: 'gmail',
             auth: {
                 user: 'notifications@solhub.app',
-                pass: 'solZ1135'
+                pass: process.env.NOTIF_EMAIL_PASSWORD
             }
         });
 
