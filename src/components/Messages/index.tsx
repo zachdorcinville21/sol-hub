@@ -62,7 +62,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                 {msgsToIterate?.map((m: Message, i: number) => {
                     if (m.author_id !== senderId) {
                         return (
-                            <div key={i} className='w-40 self-start bg-gray-400 text-black p-2 rounded-lg'>
+                            <div key={i} className='w-40 self-start bg-gray-400 text-black p-2 rounded-lg' style={{ overflowWrap: 'break-word' }}>
                                 {m.message}
                             </div>
                         );
