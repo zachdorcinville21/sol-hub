@@ -145,15 +145,15 @@ export default class UserController {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'zdorcinville@gmail.com',
-                pass: 'alienated64'
+                user: 'notifications@solhub.app',
+                pass: 'solZ1135'
             }
         });
 
         const mailOptions = {
-            from: 'zdorcinville@gmail.com',
+            from: 'notifications@solhub.app',
             to: email,
-            subject: `SolHub: new message from ${senderAddr}`,
+            subject: `$SOLHub: new message from ${senderAddr}`,
             text: message
         };
 
