@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext } from '../context/socket/index';
+import ScrollableFeed from 'react-scrollable-feed'
 import { Message } from '../util/types/Message';
 
 interface MsgProps {
@@ -58,7 +59,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
 
     return (
         <div className={`w-full bg-black h-${msgContainerHeight} flex flex-col px-6 pt-4 rounded-md`}>
-            <div className='w-full h-5/6 flex flex-col gap-4' style={{ overflow: 'auto' }}>
+            <ScrollableFeed className='w-full h-5/6 flex flex-col gap-4 overflow-auto'>
                 {msgsToIterate?.map((m: Message, i: number) => {
                     if (m.author_id !== senderId) {
                         return (
@@ -74,7 +75,7 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                         );
                     }
                 })}
-            </div>
+            </ScrollableFeed>
             <div className='flex gap-4 bg-black bottom-0 mt-2 pb-2 sticky justify-center'>
                 <input value={currentMsg} onChange={handleMsgChange} onKeyPress={handleKeyPress} type='text' placeholder='message' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                 <button onClick={sendMessage} className='p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Send</button>
