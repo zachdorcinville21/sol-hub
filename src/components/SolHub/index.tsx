@@ -31,7 +31,7 @@ function SolHub() {
     const [menuOpen, toggleMenu] = useState<boolean>(false);
     const [msgSentOpen, setSentOpen] = useState<boolean>(false);
 
-    const { nfts, connected, publicKey, onConnectClick, onDisconnectClick } = useWallet();
+    const { nfts, connected, publicKey, solBalance, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
     const { socket } = useContext(SocketContext);
     const { leftFadeSlide, fadeIn } = useAnimation();
@@ -119,7 +119,7 @@ function SolHub() {
         //eslint-disable-next-line
     }, [connected]);
 
-    const welcomeFontSize: string = 'text-2xl lg:text-3xl';
+    const welcomeFontSize: string = 'text-3xl lg:text-4xl';
 
     return (
         <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 px-4 gap-16 2xl:gap-24 bg-gray-900'>
@@ -133,16 +133,16 @@ function SolHub() {
                 connected={connected}
                 onMenuClick={toggleMobileMenu}
             />
-            {connected && <div className={username === null ? 'text-white text-xl text-center' : 'text-white text-3xl font-medium text-center'}>
+            {connected && <div className={username === null ? 'text-white text-xl text-center font-normal font-noto' : 'text-white text-3xl font-normal text-center font-noto'}>
                 {username === null || username === '' ? `${publicKey?.slice(0, 12)}...` : `${greeting}, ${username}`}
             </div>}
 
             {!connected && <div className='text-center flex flex-col gap-4'>
-                <div id='default-greeting' className={`text-white opacity-0 relative right-12 ${welcomeFontSize} font-medium`}>Welcome to $SOLhub. Your personal dashboard on Solana.</div>
-                <h3 id='connect-wallet-prompt' className='text-white opacity-0 font-medium'>Connect wallet to log in.</h3>
+                <h1 id='default-greeting' className={`text-white opacity-0 relative right-12 ${welcomeFontSize} font-normal font-noto`}>Welcome to $SOLhub. Your personal Solana dashboard.</h1>
+                <h3 id='connect-wallet-prompt' className='text-white text-lg opacity-0 font-light font-noto'>Connect wallet to get started.</h3>
             </div>}
 
-            <Stats price={solPrice} change={solDayChange} />
+            <Stats price={solPrice} change={solDayChange} balance={solBalance} />
             {connected && <NftSlider nfts={nfts} />}
             <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 

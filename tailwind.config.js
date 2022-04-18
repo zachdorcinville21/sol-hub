@@ -7,6 +7,9 @@ module.exports = {
           zinc: {
             900: '#18181b',
           },
+        },
+        fontFamily: {
+          'noto': ['Noto Sans']
         }
     },
     container: {

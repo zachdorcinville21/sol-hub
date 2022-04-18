@@ -4,6 +4,7 @@ import { createUser } from './createUser';
 import { Phantom } from './types';
 import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
 import * as solanaWeb3 from '@solana/web3.js';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { getPhantomProvider } from './getPhantomProvider';
 
 interface WalletControls {
@@ -11,6 +12,7 @@ interface WalletControls {
     publicKey: string | null;
     connected: boolean;
     phantom: Phantom | null;
+    solBalance: number | null;
     onConnectClick: () => Promise<void>;
     onDisconnectClick: () => Promise<void>;
 }
@@ -27,6 +29,7 @@ export function useWallet(): WalletControls {
     const [phantom, setPhantom] = useState<Phantom | null>(null);
     const [publicKey, setKey] = useState<string | null>(null);
     const [connected, setConnected] = useState<boolean>(false);
+    const [solBalance, setSolBalance] = useState<number | null>(null);
     const [nfts, setNfts] = useState<Array<{ [key: string]: any }> | null>(null);
 
     const onConnectClick = async () => {
@@ -66,13 +69,13 @@ export function useWallet(): WalletControls {
 
             (async () => {
                 const connection = new solanaWeb3.Connection(
-                    solanaWeb3.clusterApiUrl('devnet'),
+                    solanaWeb3.clusterApiUrl('mainnet-beta'),
                     'confirmed',
                 );
 
                 if (pk !== null) {
                     const balance = await connection.getBalance(pk);
-                    console.log(balance);
+                    setSolBalance(balance / LAMPORTS_PER_SOL);
                 }
             })();
         }
@@ -83,6 +86,7 @@ export function useWallet(): WalletControls {
         publicKey,
         connected,
         phantom,
+        solBalance,
         onConnectClick,
         onDisconnectClick,
     }

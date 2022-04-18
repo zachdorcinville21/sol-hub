@@ -37,7 +37,7 @@ const NftSlider = ({ nfts }: SliderProps) => {
     return (
         <div className={`${sliderWidth} flex flex-col gap-10 justify-center items-center`}>
             <div className='w-5/12 lg:w-3/12 p-1 rounded-md bg-black shadow-lg shadow-cyan-500 text-center'>
-                <div className='text-white text-lg'>{nftImgs.length ? 'Collectibles' : 'No collectibles'}</div>
+                <div className='text-white text-lg font-noto font-normal'>{nftImgs.length ? 'Collectibles' : 'No collectibles'}</div>
             </div>
             <Carousel
                 plugins={[
