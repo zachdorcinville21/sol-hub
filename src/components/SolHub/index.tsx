@@ -122,7 +122,7 @@ function SolHub() {
     const welcomeFontSize: string = 'text-3xl lg:text-4xl';
 
     return (
-        <div className='container min-h-screen min-w-full flex flex-col items-center pt-40 px-4 gap-16 2xl:gap-24 bg-gray-900'>
+        <div className='container min-h-screen min-w-full flex flex-col items-center pt-32 px-4 gap-12 2xl:gap-20 bg-gray-900'>
             <Logo />
             <TopMenu
                 updateNewMsg={updateNewMsg}
@@ -142,7 +142,7 @@ function SolHub() {
                 <h3 id='connect-wallet-prompt' className='text-white text-lg opacity-0 font-light font-noto'>Connect wallet to get started.</h3>
             </div>}
 
-            <Stats price={solPrice} change={solDayChange} balance={solBalance} />
+            <Stats price={solPrice} change={solDayChange} balance={solBalance} connected={connected} />
             {connected && <NftSlider nfts={nfts} />}
             <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 

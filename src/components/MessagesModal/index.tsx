@@ -74,7 +74,7 @@ export const MessagesModal = ({ open, walletAddress, newMsg, handleClose, openSe
             <Fade in={open}>
                 <div style={{ transform: 'translate(-50%, -50%)' }} className={`overflow-scroll rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center pb-6 px-1 bg-zinc-900 p-1 sm:p-4 lg:p-6`}>
                     <div className='flex gap-4 self-start items-center mt-4 ml-4 sm:m-0'>
-                        <h3 className='text-white text-2xl font-medium'>Messages</h3>
+                        <h3 className='text-white text-2xl font-medium font-noto'>Messages</h3>
                         <div onClick={() => toggleMsgForm(!showMsgForm)} className='bg-blue-700 p-2 w-10 flex justify-center items-center rounded-md cursor-pointer hover:bg-blue-600 transition-colors text-white'>
                             {showMsgForm ? 'x' : '+'}
                         </div>

@@ -1,22 +1,45 @@
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import { useScreenSize } from '../../util/hooks/useScreenSize';
+
 interface StatsProps {
     price: string | null;
     change: string | null;
     balance: number | null;
+    connected: boolean;
 }
 
-const Stats = ({ price, change, balance }: StatsProps) => {
+const Stats = ({ price, change, balance, connected }: StatsProps) => {
+    const { screenWidth } = useScreenSize();
+
     const negative: boolean = change !== null && change.includes('-');
     const solPrice: string = price !== null ? `$${parseFloat(price!).toFixed(2)}` : '';
     const solChange: string = change !== null ? (negative ? `${parseFloat(change!).toFixed(2)}%` : `+${parseFloat(change!).toFixed(2)}%`) : '';
 
-    const statsWidth: string = 'w-8/12 sm:w-6/12 md:w-5/12 lg:w-4/12 xl:w-3/12 2xl:w-2/12';
+    const containerWidth: string = screenWidth <= 576 ? '20rem' : '24rem';
+
+    // const statsWidth: string = 'w-8/12 sm:w-6/12 md:w-5/12 lg:w-4/12 xl:w-3/12 2xl:w-96';
+
+    const paperStyles = makeStyles({
+        paper: {
+            width: containerWidth,
+            backgroundColor: '#000',
+            padding: '2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '2rem',
+        }
+    });
+
+    const classes = paperStyles();
 
     return (
-        <div className={`${statsWidth} bg-black p-6 rounded-md gap-8 flex flex-col justify-center items-center`}>
+        <Paper elevation={6} classes={{ root: classes.paper }}>
             <div className='w-full flex flex-col justify-center items-center gap-3'>
                 <div className='w-full flex flex-row justify-center items-center'>
-                    <img src='https://sticnuru.sirv.com/sol-hub-imgs/solana.png' className='w-10 h-10' alt='solana' />Ï
-                    <p className='text-3xl text-white font-normal font-noto flex mt-2 items-center gap-2'>
+                    <img src='https://sticnuru.sirv.com/sol-hub-imgs/solana.png' className='w-10 h-10' alt='solana' />
+                    <p className='text-3xl text-white font-normal font-noto flex items-center gap-2'>
                         Solana <sub className='text-base text-gray-400 mb-0.5'>SOL</sub>
                     </p>
                 </div>
@@ -31,10 +54,15 @@ const Stats = ({ price, change, balance }: StatsProps) => {
                 </div>
             </div>
 
-            <div className='w-full flex justify-center'>
-                <p className='text-white font-noto font-light text-lg'>{`Current balance: ${balance ?? 0} SOL`}</p>
-            </div>
-        </div>
+            {connected &&
+                <div className='w-full flex flex-col justify-center items-center gap-3'>
+                    <div className='w-full flex justify-center'>
+                        <p className='text-white font-noto font-light text-lg'>{`Current balance: ${balance ?? 0} SOL`}</p>
+                    </div>
+                    <button className='bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800'>Send SOL</button>
+                </div>
+            }
+        </Paper>
     );
 }
 

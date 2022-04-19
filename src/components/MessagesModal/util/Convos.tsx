@@ -47,7 +47,7 @@ const Convos = ({ msgObject, walletAddr }: ConvosProps) => {
                                 style={{ display: 'flex', alignItems: 'center' }}
                             >
                                 <img onClick={(e) => onDelete(e, walletAddr, receiver)} src='https://sticnuru.sirv.com/sol-hub-imgs/delete.png' alt='delete-icon' className='w-5 h-5 mr-4 mt-0.5 hover:opacity-50' />
-                                <div className='text-white'>{p}</div>
+                                <div className='text-white font-noto font-light'>{p}</div>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Messages msgObject={c.messages} senderId={walletAddr!} receiverId={c.participants.find((p: string) => p !== walletAddr)} />

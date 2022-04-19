@@ -63,13 +63,13 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                 {msgsToIterate?.map((m: Message, i: number) => {
                     if (m.author_id !== senderId) {
                         return (
-                            <div key={i} className='w-40 self-start bg-gray-400 text-black p-2 rounded-lg' style={{ overflowWrap: 'break-word' }}>
+                            <div key={i} className='w-40 self-start bg-gray-400 text-black p-2 rounded-lg font-noto' style={{ overflowWrap: 'break-word' }}>
                                 {m.message}
                             </div>
                         );
                     } else {
                         return (
-                            <div key={i} className='w-40 self-end bg-blue-800 text-white p-2 rounded-lg' style={{ overflowWrap: 'break-word' }}>
+                            <div key={i} className='w-40 self-end bg-blue-800 text-white p-2 rounded-lg font-noto' style={{ overflowWrap: 'break-word' }}>
                                 {m.message}
                             </div>
                         );
@@ -77,8 +77,8 @@ const Messages = ({ msgObject, senderId, receiverId }: MsgProps) => {
                 })}
             </ScrollableFeed>
             <div className='flex gap-4 bg-black bottom-0 mt-2 pb-2 sticky justify-center'>
-                <input value={currentMsg} onChange={handleMsgChange} onKeyPress={handleKeyPress} type='text' placeholder='message' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                <button onClick={sendMessage} className='p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Send</button>
+                <input value={currentMsg} onChange={handleMsgChange} onKeyPress={handleKeyPress} type='text' placeholder='message' className='rounded-md font-noto p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                <button onClick={sendMessage} className='p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center font-noto bg-blue-700 text-white'>Send</button>
             </div>
         </div>
     );

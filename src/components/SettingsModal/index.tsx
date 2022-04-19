@@ -38,11 +38,11 @@ export const SettingsModal = ({ open, handleClose, onSave, walletAddress }: SMPr
         >
             <Fade in={open}>
                 <div style={{ transform: 'translate(-50%, -50%)' }} className={`rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center bg-zinc-900 p-6`}>
-                    <h3 className='text-white text-2xl font-medium self-start'>Profile</h3>
+                    <h3 className='text-white text-2xl font-medium font-noto self-start'>Profile</h3>
 
                     <input onChange={onUsernameChange} type='text' placeholder='Edit username' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                     <input onChange={onEmailChange} type='text' placeholder='Email for offline notifications' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                    <button onClick={() => onSave(username, email)} className='m-auto p-4 w-40 rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Save</button>
+                    <button onClick={() => onSave(username, email)} className='m-auto p-4 w-40 font-noto rounded-md hover:bg-blue-800 transition-colors text-center bg-blue-700 text-white'>Save</button>
                 </div>
             </Fade>
         </Modal>
