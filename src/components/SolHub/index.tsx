@@ -13,12 +13,15 @@ import { useProfileData } from '../util/hooks/useProfileData';
 import { useGreeting } from '../util/hooks/useGreeting';
 import { SocketContext } from '../context/socket';
 import { NotifUpdateConfig } from './util/types';
-import { ChangesSavedMsg, MsgSentAlert, NotifMsg } from '../util/misc/Snackbars';
+import { ChangesSavedMsg, MsgSentAlert, NotifMsg, TransFailedAlert } from '../util/misc/Snackbars';
 import { useAnimation } from '../util/hooks/useAnimation';
 import gsap from 'gsap';
+import { TransactionModal } from '../TransactionModal';
+import { useSnackbar } from '../util/hooks/useSnackbar';
+import { TransSuccessAlert } from '../util/misc/Snackbars';
 
 
-function SolHub() {
+export default function SolHub(): JSX.Element {
     const [solPrice, setSolPrice] = useState<string | null>(null);
     const [solDayChange, setSolDayChange] = useState<string | null>(null);
     const [messagesMenuOpen, toggleMessageMenu] = useState<boolean>(false);
@@ -30,12 +33,15 @@ function SolHub() {
     const [senderWallet, setSender] = useState<string>('');
     const [menuOpen, toggleMenu] = useState<boolean>(false);
     const [msgSentOpen, setSentOpen] = useState<boolean>(false);
+    const [transModalOpen, toggleTransModal] = useState<boolean>(false);
 
-    const { nfts, connected, publicKey, solBalance, onConnectClick, onDisconnectClick } = useWallet();
+    const { nfts, connected, publicKey, phantom, solBalance, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
     const { socket } = useContext(SocketContext);
     const { leftFadeSlide, fadeIn } = useAnimation();
     const greeting = useGreeting();
+
+    const { transMsgOpen, closeTransMsg, openTransMsg, errorMsgOpen, openErrorMsg, closeErrorMsg } = useSnackbar();
 
     const openMessages = () => {
         toggleMessageMenu(true);
@@ -54,6 +60,9 @@ function SolHub() {
 
     const openSentAlert = () => setSentOpen(true);
     const closeSentMsg = () => setSentOpen(false);
+
+    const openTransactionModal = (): void => toggleTransModal(true);
+    const closeTransModal = (): void => toggleTransModal(false);
 
     const toggleMobileMenu = () => {
         toggleMenu(!menuOpen);
@@ -122,7 +131,7 @@ function SolHub() {
     const welcomeFontSize: string = 'text-3xl lg:text-4xl';
 
     return (
-        <div className='container min-h-screen min-w-full flex flex-col items-center pt-32 px-4 gap-12 2xl:gap-20 bg-gray-900'>
+        <div className='container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-8 2xl:gap-16 bg-gray-900'>
             <Logo />
             <TopMenu
                 updateNewMsg={updateNewMsg}
@@ -142,20 +151,22 @@ function SolHub() {
                 <h3 id='connect-wallet-prompt' className='text-white text-lg opacity-0 font-light font-noto'>Connect wallet to get started.</h3>
             </div>}
 
-            <Stats price={solPrice} change={solDayChange} balance={solBalance} connected={connected} />
+            <Stats price={solPrice} change={solDayChange} balance={solBalance} connected={connected} openTransModal={openTransactionModal} />
             {connected && <NftSlider nfts={nfts} />}
             <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 
+            {/** Modals */}
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={handleProfileChange} />
             <MessagesModal openSentAlert={openSentAlert} newMsg={newMsg} open={messagesMenuOpen} walletAddress={publicKey} handleClose={closeMessages} updateNotifCount={updateNotifCount} />
+            <TransactionModal open={transModalOpen} handleClose={closeTransModal} openTransMsg={openTransMsg} openErrorMsg={openErrorMsg} pubKey={publicKey} phantom={phantom} />
 
+            {/** Alerts */}
             <NotifMsg open={notifMsgOpen} handleClose={closeNotifMsg} message={newMsg} sender={senderWallet} />
             <ChangesSavedMsg open={changesSavedOpen} handleClose={closeSavedMsg} />
             <MsgSentAlert open={msgSentOpen} handleClose={closeSentMsg} />
+            <TransSuccessAlert open={transMsgOpen} handleClose={closeTransMsg} />
+            <TransFailedAlert open={errorMsgOpen} handleClose={closeTransMsg} />
         </div>
     );
 }
-
-
-export default SolHub;
 

@@ -61,3 +61,23 @@ export const MsgSentAlert = ({ open, handleClose }: SnackbarProps) => {
     );
 }
 
+export const TransSuccessAlert = ({ open, handleClose }: SnackbarProps) => {
+    return (
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Alert onClose={handleClose} severity='success' variant='filled'>
+                Transaction successful.
+            </Alert>
+        </Snackbar>
+    );
+}
+
+export const TransFailedAlert = ({ open, handleClose }: SnackbarProps) => {
+    return (
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Alert onClose={handleClose} severity='error' variant='filled'>
+                Transaction failed. Please try again.
+            </Alert>
+        </Snackbar>
+    );
+}
+

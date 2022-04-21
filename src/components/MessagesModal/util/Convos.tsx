@@ -6,7 +6,6 @@ import Messages from '../../Messages/index';
 import { Socket } from 'socket.io-client';
 import { uc } from '../../util/user-crud';
 import React, { useEffect, useState } from 'react';
-import { Convo } from '../../util/types/Message';
 
 interface ConvosProps {
     socket: Socket | null;

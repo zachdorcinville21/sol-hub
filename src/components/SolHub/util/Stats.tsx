@@ -7,9 +7,10 @@ interface StatsProps {
     change: string | null;
     balance: number | null;
     connected: boolean;
+    openTransModal: () => void;
 }
 
-const Stats = ({ price, change, balance, connected }: StatsProps) => {
+const Stats = ({ price, change, balance, connected, openTransModal }: StatsProps) => {
     const { screenWidth } = useScreenSize();
 
     const negative: boolean = change !== null && change.includes('-');
@@ -59,7 +60,7 @@ const Stats = ({ price, change, balance, connected }: StatsProps) => {
                     <div className='w-full flex justify-center'>
                         <p className='text-white font-noto font-light text-lg'>{`Current balance: ${balance ?? 0} SOL`}</p>
                     </div>
-                    <button className='bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800'>Send SOL</button>
+                    <button onClick={openTransModal} className='bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800'>Send SOL</button>
                 </div>
             }
         </Paper>

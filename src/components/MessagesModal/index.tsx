@@ -4,7 +4,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Convos from './util/Convos';
-import { Convo } from '../util/types/Message';
 import { NotifUpdateConfig } from '../SolHub/util/types';
 import { uc } from '../util/user-crud/index';
 

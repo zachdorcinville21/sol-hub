@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { Convo } from './Message';
 import APIQuery from './APIQuery';
-
 
 export default class UserController extends APIQuery {
     async getUsername(walletAddress: string | null): Promise<string | null> {

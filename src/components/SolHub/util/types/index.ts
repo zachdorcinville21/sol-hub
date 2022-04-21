@@ -5,6 +5,7 @@ export interface Phantom {
     disconnect: () => Promise<void>;
     on: (e: PhantomEvent, callback: () => void) => void;
     publicKey: any;
+    secretKey: any;
     request: (params: { [key: string]: any }) => Promise<any>;
 }
 

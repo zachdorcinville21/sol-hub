@@ -75,7 +75,7 @@ export function useWallet(): WalletControls {
 
                 if (pk !== null) {
                     const balance = await connection.getBalance(pk);
-                    setSolBalance(balance / LAMPORTS_PER_SOL);
+                    setSolBalance(Math.round((balance / LAMPORTS_PER_SOL) * 1000) / 1000);
                 }
             })();
         }
@@ -89,7 +89,7 @@ export function useWallet(): WalletControls {
         solBalance,
         onConnectClick,
         onDisconnectClick,
-    }
+    };
 }
 
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SocketContext } from '../context/socket/index';
 import ScrollableFeed from 'react-scrollable-feed'
-import { Message } from '../util/types/Message';
 
 interface MsgProps {
     msgObject: any;
