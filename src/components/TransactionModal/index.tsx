@@ -74,7 +74,7 @@ export const TransactionModal = (props: TMProps): JSX.Element => {
 
                     <form onSubmit={onSend} className='flex flex-col gap-10 justify-center items-center'>
                         <input required onChange={onReceiverAddressChange} type='text' placeholder='SOL address' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                        <input required onChange={onAmountChange} type='number' step="0.1" placeholder='Amount' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                        <input required onChange={onAmountChange} type='number' step="any" placeholder='Amount' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
                         <button type='submit' className='m-auto p-4 w-40 font-noto rounded-md hover:bg-blue-800 transition-colors flex justify-center items-center bg-blue-700 text-white'>
                             {processingTransaction && <RingLoader color="#fff" size={25} css={override} loading />}
                             {!processingTransaction && "Send"}
