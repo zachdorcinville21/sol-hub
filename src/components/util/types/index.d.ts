@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
     /**
@@ -15,7 +15,7 @@ declare global {
         message: string;
         created_at: Date;
     }
-    
+
     interface Convo {
         convo_id: string;
         messages: Message[];
@@ -27,4 +27,20 @@ declare global {
         wallet_addr: string;
         username: string | null;
     }
+
+    interface WalletControls {
+        nfts: Array<{ [key: string]: any }> | null;
+        publicKey: string | null;
+        connected: boolean;
+        phantom: Phantom | null;
+        solBalance: number | null;
+        onConnectClick: () => Promise<void>;
+        onDisconnectClick: () => Promise<void>;
+    }
+
+    const window: Window &
+        typeof globalThis & {
+            solana: any,
+        }
+
 }

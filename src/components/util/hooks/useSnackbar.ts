@@ -16,7 +16,12 @@ export function useSnackbar(): SnackbarControls {
     const openTransMsg = () => toggleTransMsg(true);
     const closeTransMsg = () => toggleTransMsg(false);
 
-    const openErrorMsg = () => toggleErrorMsg(true);
+    const openErrorMsg = () => {
+        toggleErrorMsg(true);
+        setTimeout(() => {
+            toggleErrorMsg(false);
+        }, 3000);
+    }
     const closeErrorMsg = () => toggleErrorMsg(false);
 
     return {

@@ -40,7 +40,9 @@ export const TransactionModal = (props: TMProps): JSX.Element => {
         setReceiverAddress(e.target.value);
     }
 
-    async function onSend(): Promise<void> {
+    async function onSend(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+        e.preventDefault();
+
         toggleProcessing(true);
 
         const sig = await tc.send(receiverAddress, amount);
@@ -70,12 +72,14 @@ export const TransactionModal = (props: TMProps): JSX.Element => {
                 <div style={{ transform: 'translate(-50%, -50%)' }} className={`rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center bg-zinc-900 p-6`}>
                     <h3 className='text-white text-2xl font-medium font-noto self-start'>Send Solana</h3>
 
-                    <input onChange={onReceiverAddressChange} type='text' placeholder='SOL address' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                    <input onChange={onAmountChange} type='number' step="0.1" placeholder='Amount' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
-                    <button onClick={onSend} className='m-auto p-4 w-40 font-noto rounded-md hover:bg-blue-800 transition-colors flex justify-center items-center bg-blue-700 text-white'>
-                        {processingTransaction && <RingLoader color="#fff" size={25} css={override} loading />}
-                        {!processingTransaction && "Send"}
-                    </button>
+                    <form onSubmit={onSend} className='flex flex-col gap-10 justify-center items-center'>
+                        <input required onChange={onReceiverAddressChange} type='text' placeholder='SOL address' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                        <input required onChange={onAmountChange} type='number' step="0.1" placeholder='Amount' className='rounded-md p-4 outline-none w-80 bg-zinc-900 border border-gray-600 placeholder-gray-600 text-white' />
+                        <button type='submit' className='m-auto p-4 w-40 font-noto rounded-md hover:bg-blue-800 transition-colors flex justify-center items-center bg-blue-700 text-white'>
+                            {processingTransaction && <RingLoader color="#fff" size={25} css={override} loading />}
+                            {!processingTransaction && "Send"}
+                        </button>
+                    </form>
                 </div>
             </Fade>
         </Modal>

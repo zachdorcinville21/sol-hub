@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { ConnectWalletBtn } from "../ConnectWalletBtn";
 import { useWallet } from './util/useWallet';
-import NftSlider from "../NftSlider";
 import { Logo } from "./util/Logo";
 import { getSolPrice } from './util/getSolPrice';
 import { getSolDayChange } from './util/getSolDayChange';
@@ -19,6 +18,7 @@ import gsap from 'gsap';
 import { TransactionModal } from '../TransactionModal';
 import { useSnackbar } from '../util/hooks/useSnackbar';
 import { TransSuccessAlert } from '../util/misc/Snackbars';
+import { Link } from 'react-router-dom';
 
 
 export default function SolHub(): JSX.Element {
@@ -35,13 +35,13 @@ export default function SolHub(): JSX.Element {
     const [msgSentOpen, setSentOpen] = useState<boolean>(false);
     const [transModalOpen, toggleTransModal] = useState<boolean>(false);
 
-    const { nfts, connected, publicKey, phantom, solBalance, onConnectClick, onDisconnectClick } = useWallet();
+    const { connected, publicKey, phantom, solBalance, onConnectClick, onDisconnectClick } = useWallet();
     const { username, onSave } = useProfileData(publicKey, connected);
     const { socket } = useContext(SocketContext);
     const { leftFadeSlide, fadeIn } = useAnimation();
     const greeting = useGreeting();
 
-    const { transMsgOpen, closeTransMsg, openTransMsg, errorMsgOpen, openErrorMsg, closeErrorMsg } = useSnackbar();
+    const { transMsgOpen, closeTransMsg, openTransMsg, errorMsgOpen, openErrorMsg } = useSnackbar();
 
     const openMessages = () => {
         toggleMessageMenu(true);
@@ -131,7 +131,7 @@ export default function SolHub(): JSX.Element {
     const welcomeFontSize: string = 'text-3xl lg:text-4xl';
 
     return (
-        <div className='container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-8 2xl:gap-16 bg-gray-900'>
+        <div className='container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-8 2xl:gap-24 bg-gray-900'>
             <Logo />
             <TopMenu
                 updateNewMsg={updateNewMsg}
@@ -152,7 +152,13 @@ export default function SolHub(): JSX.Element {
             </div>}
 
             <Stats price={solPrice} change={solDayChange} balance={solBalance} connected={connected} openTransModal={openTransactionModal} />
-            {connected && <NftSlider nfts={nfts} />}
+            {connected && 
+                <Link to="/collectibles">
+                    <button className="bg-black text-white p-4 rounded-md w-40 transition-shadow hover:shadow-2xl shadow-blue-500/50">
+                        View collectibles
+                    </button>
+                </Link>
+            }
             <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 
             {/** Modals */}

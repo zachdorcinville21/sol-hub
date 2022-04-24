@@ -1,6 +1,9 @@
 import * as solanaWeb3 from '@solana/web3.js';
 import { Phantom } from '../../SolHub/util/types';
 
+/**
+ * An object for creating, signing, and executing transactions on the Solana blockchain.
+ */
 export default class TransactionClient implements TC {
     public walletAddress: string | null;
     private phantom: Phantom | any;
