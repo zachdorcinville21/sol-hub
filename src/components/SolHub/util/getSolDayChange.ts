@@ -5,7 +5,7 @@ export async function getSolDayChange(): Promise<number> {
     let data = null;
 
     try {
-        const result = await axios.get('http://localhost:5001/api/sol-day-change');
+        const result = await axios.get('https://solhub.app/api/sol-day-change');
         
         if (result) data = result.data.change;
     } catch (e) {

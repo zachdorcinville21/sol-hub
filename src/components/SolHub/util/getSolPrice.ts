@@ -4,7 +4,7 @@ export async function getSolPrice(): Promise<number> {
     let solPrice = null;
     
     try {
-        const result = await axios.get('http://localhost:5001/api/sol-price');
+        const result = await axios.get('https://solhub.app/api/sol-price');
 
         if (result.data) solPrice = result.data.price;
     } catch (e) {

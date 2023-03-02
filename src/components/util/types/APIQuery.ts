@@ -4,7 +4,7 @@ abstract class APIQuery {
     private _updateEmailRoute: string = 'https://solhub.app/api/update-email';
     private _getConvosRoute: string = 'https://solhub.app/api/get-conversations';
     private _deleteConvoRoute: string = 'https://solhub.app/api/delete-conversation';
-    private _getSolNftsRoute: string = 'http://localhost:5001/api/get-sol-nfts';
+    private _getSolNftsRoute: string = 'https://solhub.app/api/get-sol-nfts';
 
     public get getUsernameRoute(): string {
         return this._getUsernameRoute;
