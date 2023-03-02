@@ -38,6 +38,11 @@ declare global {
         onDisconnectClick: () => Promise<void>;
     }
 
+    interface GraphPoint {
+        date: string;
+        value: unknown;
+    }
+
     const window: Window &
         typeof globalThis & {
             solana: any,

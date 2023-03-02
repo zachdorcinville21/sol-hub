@@ -1,4 +1,3 @@
-import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
 import * as solanaWeb3 from '@solana/web3.js';
 import { useState, createContext, useEffect, useCallback } from "react";
 import { connectToWallet } from "../../components/SolHub/util/connectToWallet";
@@ -6,6 +5,7 @@ import { createUser } from "../../components/SolHub/util/createUser";
 import { getPhantomProvider } from "../../components/SolHub/util/getPhantomProvider";
 import { Phantom } from "../../components/SolHub/util/types";
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { uc } from "../../components/util/user-crud";
 
 interface WalletProviderProps {
     children: React.ReactNode;
@@ -36,12 +36,12 @@ export default function WalletProvider({ children }: WalletProviderProps): JSX.E
         if (phantomProvider === null) {
             window.open('https://phantom.app/', '_blank');
         } else {
-            setPhantom(phantomProvider);
+            setPhantom(phantomProvider as Phantom);
 
-            const result = await connectToWallet(phantomProvider);
+            const result = await connectToWallet(phantomProvider as Phantom);
             setKey(result);
 
-            const tokenList = await getParsedNftAccountsByOwner({ publicAddress: result });
+            const tokenList = await uc.getSolNfts(result ?? '');
             setNfts(tokenList);
 
             let createUserStatus = null;
@@ -67,7 +67,7 @@ export default function WalletProvider({ children }: WalletProviderProps): JSX.E
 
             (async () => {
                 const connection = new solanaWeb3.Connection(
-                    solanaWeb3.clusterApiUrl('mainnet-beta'),
+                    process.env.REACT_APP_SOL_QUICKNODE_URL ?? '',
                     'confirmed',
                 );
 

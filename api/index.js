@@ -6,6 +6,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import UserController from './controllers/types/UserController.js';
 import ConvoFactory from './controllers/types/ConvoFactory.js';
+import { getSolNfts } from './controllers/getSolNfts.js';
+import { getHistoricalSolPrice } from './controllers/getHistoricalSolPrice.js';
 
 const app = express();
 const server = createServer(app);
@@ -19,7 +21,7 @@ const io = new Server(server, {
     },
 });
 
-const PORT = 5000;
+const PORT = 5001;
 
 const uc = new UserController();
 const cf = new ConvoFactory();
@@ -39,6 +41,10 @@ app.post('/api/get-username', uc.getUsername);
 app.post('/api/get-conversations', cf.getConversations);
 
 app.post('/api/delete-conversation', cf.deleteConversation);
+
+app.post('/api/get-sol-nfts', getSolNfts);
+
+app.post('/api/get-sol-historical', getHistoricalSolPrice);
 
 io.on('connection', socket => {
     socket.on('new-user-connected', ({ walletAddress, username }) => {

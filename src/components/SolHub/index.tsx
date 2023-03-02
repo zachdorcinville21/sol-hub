@@ -102,10 +102,10 @@ export default function SolHub(): JSX.Element {
         (async () => {
             try {
                 const data = await getSolPrice();
-                setSolPrice(data.price);
+                setSolPrice(data.toString());
 
                 const change = await getSolDayChange();
-                setSolDayChange(change.priceChangePercent);
+                setSolDayChange(change.toString());
             } catch (e) {
                 console.error(e);
             }
@@ -142,6 +142,8 @@ export default function SolHub(): JSX.Element {
                 connected={connected}
                 onMenuClick={toggleMobileMenu}
             />
+            <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
+            
             {connected && <div className={username === null ? 'text-white text-xl text-center font-normal font-noto' : 'text-white text-3xl font-normal text-center font-noto'}>
                 {username === null || username === '' ? `${publicKey?.slice(0, 12)}...` : `${greeting}, ${username}`}
             </div>}
@@ -151,7 +153,13 @@ export default function SolHub(): JSX.Element {
                 <h3 id='connect-wallet-prompt' className='text-white text-lg opacity-0 font-light font-noto'>Connect wallet to get started.</h3>
             </div>}
 
-            <Stats price={solPrice} change={solDayChange} balance={solBalance} connected={connected} openTransModal={openTransactionModal} />
+            <Stats 
+                price={solPrice} 
+                change={solDayChange} 
+                balance={solBalance} 
+                connected={connected} 
+                openTransModal={openTransactionModal} 
+            />
             {connected && 
                 <Link to="/collectibles">
                     <button className="bg-black text-white p-4 rounded-md w-40 transition-shadow hover:shadow-2xl shadow-blue-500/50">
@@ -159,7 +167,6 @@ export default function SolHub(): JSX.Element {
                     </button>
                 </Link>
             }
-            <ConnectWalletBtn onClick={!connected ? onConnectClick : handleDisconnect} publicKey={publicKey} connected={connected} />
 
             {/** Modals */}
             <SettingsModal open={settingsMenuOpen} walletAddress={publicKey} handleClose={closeSettings} onSave={handleProfileChange} />
