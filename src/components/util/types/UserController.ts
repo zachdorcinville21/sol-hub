@@ -97,5 +97,22 @@ export default class UserController extends APIQuery {
 
         return status;
     }
+
+    async getSolNfts(publicKey: string): Promise<Record<string, any>[]> {
+        let nfts = [];
+
+        try {
+            const result = await axios.post(this.getSolNftsRoute, {
+                data: {
+                    publicKey,
+                }
+            });
+            if (result) nfts = result.data.tokenList;
+        } catch (e) {
+            console.error(e);
+        }
+
+        return nfts;
+    }
 }
 
