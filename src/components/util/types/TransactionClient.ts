@@ -12,8 +12,9 @@ export default class TransactionClient implements TC {
   constructor(walletAddress: string | null, phantom: Phantom | null) {
     this.walletAddress = walletAddress;
     this.phantom = phantom;
+    console.log(process.env.REACT_APP_SOL_QUICKNODE_URL)
     this.connection = new solanaWeb3.Connection(
-      process.env.REACT_APP_SOL_QUICKNODE_URL ?? "",
+      import.meta.env.VITE_SOL_QUICKNODE_URL ?? "",
       "confirmed"
     );
   }

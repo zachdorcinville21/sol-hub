@@ -1,0 +1,1 @@
+export type SolChartData = Array<[number, number]>;

@@ -24,6 +24,7 @@ import { TransactionModal } from "../TransactionModal";
 import { useSnackbar } from "../util/hooks/useSnackbar";
 import { TransSuccessAlert } from "../util/misc/Snackbars";
 import { Link } from "react-router-dom";
+import { SolChart } from "./components/SolChart";
 
 export default function SolHub(): JSX.Element {
   const [solPrice, setSolPrice] = useState<string | null>(null);
@@ -154,7 +155,7 @@ export default function SolHub(): JSX.Element {
   const welcomeFontSize: string = "text-3xl lg:text-4xl";
 
   return (
-    <div className="container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-8 2xl:gap-24 bg-gray-900">
+    <div className="container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-4 2xl:gap-12 bg-gray-900">
       <Logo />
       <TopMenu
         updateNewMsg={updateNewMsg}
@@ -207,13 +208,15 @@ export default function SolHub(): JSX.Element {
         connected={connected}
         openTransModal={openTransactionModal}
       />
-      {connected && (
+      {/* {connected && (
         <Link to="/collectibles">
           <button className="bg-black text-white p-4 rounded-md w-40 transition-shadow hover:shadow-2xl shadow-blue-500/50">
             View collectibles
           </button>
         </Link>
-      )}
+      )} */}
+
+      <SolChart solDayChange={solDayChange ?? '0'} />
 
       {/** Modals */}
       <SettingsModal

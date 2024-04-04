@@ -1,16 +1,22 @@
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-        colors: {
-          zinc: {
-            900: '#18181b',
-          },
+      colors: {
+        zinc: {
+          900: '#18181b',
         },
-        fontFamily: {
-          'noto': ['Noto Sans']
+        gray: {
+          950: '#16161d',
+        },
+        'dark-gray': {
+          900: '#16161d'
         }
+      },
+      fontFamily: {
+        'noto': ['Noto Sans']
+      }
     },
     container: {
       center: true,
