@@ -15,6 +15,7 @@
     "@nfteyez/sol-rayz": "^0.10.2",
     "@solana/web3.js": "^1.73.3",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "mongoose": "^6.1.2",

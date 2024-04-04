@@ -1,15 +1,21 @@
 import axios from 'axios';
 
 export async function getSolDayChange(req, res) {
+    let change = null;
+
     try {
-        const result = await axios.get('https://api.coingecko.com/api/v3/coins/solana', {
+        const result = await axios.get('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=SOL', {
             headers: {
-                'x-cg-pro-api-key': process.env.COINGECKO_API_KEY,
+                'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
             }
         });
-        return res.send({ change: result.data.market_data.price_change_percentage_24h_in_currency.usd });
-    } catch (e) {
-        return res.status(500).send({ message: `unable to fetch price change: ${e}` });
-    }
-}
 
+        const { percent_change_24h: solChange } = result.data.data.SOL[0].quote.USD;
+
+        if (solChange) change = solChange;
+    } catch (e) {
+        throw new Error(e);
+    }
+
+    return res.send({ change });
+}

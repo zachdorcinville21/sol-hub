@@ -1,13 +1,18 @@
 import axios from "axios";
+import { sub } from 'date-fns';
 
-export async function getSolHistoricalData(req, res) {
+export async function getSolHistoricalData(_, res) {
+  const sevenDaysAgo = sub(new Date(), {
+    days: 7
+  })
   try {
-    const result = await axios.get(`https://api.coingecko.com/api/v3/coins/solana/market_chart?days=3&vs_currency=usd`, {
+    const result = await axios.get(`https://pro-api.coinmarketcap.com/v3/cryptocurrency/quotes/historical?symbol=SOL&time_start=${sevenDaysAgo.getTime()}&interval=daily&count=10`, {
       headers: {
-        'x-cg-api-key': process.env.COINGECKO_API_KEY,
+        'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
       }
     });
-    res.send({ prices: result.data.prices });
+    const quotes = result.data.data.SOL[0].quotes.map((quote) => ({ timestamp: new Date(quote.timestamp).getTime(), price: quote.quote.USD.price }));
+    res.send({ quotes });
   } catch (e) {
     console.error(e);
     res.status(500).send({ message: `unable to fetch historical data: ${e}` });
