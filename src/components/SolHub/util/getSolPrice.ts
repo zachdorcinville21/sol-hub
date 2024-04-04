@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
+import { API_BASE_URL } from "../../../constants";
 
 export async function getSolPrice(): Promise<number> {
-    let solPrice = null;
-    
-    try {
-        const result = await axios.get('https://solhub.app/api/sol-price');
+  let solPrice = null;
 
-        if (result.data) solPrice = result.data.price;
-    } catch (e) {
-        console.error(e);
-    }
+  try {
+    const result = await axios.get(`${API_BASE_URL}/api/sol-price`);
 
-    return solPrice;
+    if (result.data) solPrice = result.data.price;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return solPrice;
 }

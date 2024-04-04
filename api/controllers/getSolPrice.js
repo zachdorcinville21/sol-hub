@@ -1,22 +1,17 @@
 import axios from 'axios';
 
-export async function getSolPrice(req, res) {
-    let price = null;
-
+export async function getSolPrice(_, res) {
     try {
-        const result = await axios.get('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=SOL', {
+        const chartDataResult = await axios.get(`https://api.coingecko.com/api/v3/coins/solana`, {
             headers: {
-                'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
+                'x-cg-api-key': process.env.COINGECKO_API_KEY,
             }
         });
 
-        const { price: solPrice } = result.data.data.SOL[0].quote.USD;
-
-        if (solPrice) price = solPrice;
+        return res.send({ price: chartDataResult.data.market_data.current_price.usd })
     } catch (e) {
         console.error(e);
+        return res.status(500).send({ message: `unable to fetch price: ${e}` });
     }
-
-    return res.send({ price });
 }
 

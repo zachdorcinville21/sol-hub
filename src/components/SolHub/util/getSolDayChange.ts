@@ -1,17 +1,15 @@
-import axios from 'axios';
-
+import axios from "axios";
+import { API_BASE_URL } from "../../../constants";
 
 export async function getSolDayChange(): Promise<number> {
-    let data = null;
+  let data = null;
 
-    try {
-        const result = await axios.get('https://solhub.app/api/sol-day-change');
-        
-        if (result) data = result.data.change;
-    } catch (e) {
-        console.error(e);
-    }
+  try {
+    const result = await axios.get(`${API_BASE_URL}/api/sol-day-change`);
+    if (result) data = result.data.change;
+  } catch (e) {
+    console.error(e);
+  }
 
-    return data;
+  return data;
 }
-
