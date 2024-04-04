@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { getSolPrice } from './controllers/getSolPrice.js';
 import { getSolDayChange } from './controllers/getSolDayChange.js';
+import { getSolHistoricalData } from './controllers/getSolHistoricalData.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import UserController from './controllers/types/UserController.js';
@@ -42,6 +43,8 @@ app.post('/api/get-conversations', cf.getConversations);
 app.post('/api/delete-conversation', cf.deleteConversation);
 
 app.post('/api/get-sol-nfts', getSolNfts);
+
+app.get('/api/sol-historical', getSolHistoricalData);
 
 io.on('connection', socket => {
     socket.on('new-user-connected', ({ walletAddress, username }) => {
