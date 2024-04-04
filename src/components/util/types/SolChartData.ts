@@ -1,1 +1,1 @@
-export type SolChartData = Array<[number, number]>;
+export type SolChartData = Array<{ timestamp: number; price: number }>;

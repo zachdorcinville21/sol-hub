@@ -155,7 +155,7 @@ export default function SolHub(): JSX.Element {
   const welcomeFontSize: string = "text-3xl lg:text-4xl";
 
   return (
-    <div className="container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-4 2xl:gap-12 bg-gray-900">
+    <div className="container min-h-screen min-w-full flex flex-col items-center pt-32 lg:pt-28 px-4 gap-24 2xl:gap-16 bg-gray-900">
       <Logo />
       <TopMenu
         updateNewMsg={updateNewMsg}

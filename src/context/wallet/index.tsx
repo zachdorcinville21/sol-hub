@@ -67,7 +67,7 @@ export default function WalletProvider({ children }: WalletProviderProps): JSX.E
 
             (async () => {
                 const connection = new solanaWeb3.Connection(
-                    process.env.REACT_APP_SOL_QUICKNODE_URL ?? '',
+                    import.meta.env.VITE_SOL_QUICKNODE_URL ?? '',
                     'confirmed',
                 );
 

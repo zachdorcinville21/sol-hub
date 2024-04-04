@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { SolChartData } from "../../util/types/SolChartData";
-import { getSolHistoricalData } from "../util/getSolHistoricalData";
+import { useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -10,6 +8,10 @@ import {
   YAxis,
 } from "recharts";
 import { format } from "date-fns";
+import { useSolQuotes } from "../../util/hooks/react-query/useSolQuotes";
+import { PuffLoader } from "react-spinners";
+import { theme } from "../../util/theme";
+import { motion } from "framer-motion";
 
 interface PriceDataItem {
   name: string;
@@ -22,67 +24,62 @@ interface SolChartProps {
 }
 
 export function SolChart({ solDayChange }: SolChartProps) {
-  const [prices, setPrices] = useState<SolChartData>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const result = await getSolHistoricalData();
-      if (result !== null) {
-        setPrices(result);
-        setIsLoading(false);
-      } else {
-        return;
-      }
-    })();
-  }, []);
+  const { data: quotes, isLoading, isError } = useSolQuotes();
 
   const chartData = useMemo((): PriceDataItem[] => {
-    return prices.map((priceArr) => ({
-      name: format(priceArr[0], "M/dd, h:mm aaa"),
-      price: priceArr[1],
-      xAxisLabel: format(priceArr[0], "M/dd"),
+    if (!quotes) return [];
+    return quotes.map((quote) => ({
+      name: format(quote.timestamp, "M/dd, h:mm aaa"),
+      price: quote.price,
+      xAxisLabel: format(quote.timestamp, "M/dd"),
     }));
-  }, [prices]);
+  }, [quotes]);
+
+  console.log("🚀 ~ chartData ~ chartData:", chartData)
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center items-center h-80">
+        <PuffLoader color={theme.colors.blue[900]} size="100px" />
+      </div>
+    );
+  }
 
   return (
-    <AreaChart width={1400} height={650} data={chartData}>
-      <defs>
-        <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-          <stop
-            offset="5%"
-            stopColor={
-              solDayChange.includes("-") ? "rgb(185, 28, 28)" : "#03C03C"
-            }
-            stopOpacity={0.8}
+    <motion.div
+      className="w-11/12 flex justify-center items-center min-h-[600px]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <ResponsiveContainer width="100%" minHeight={600}>
+        <AreaChart
+          data={chartData}
+          margin={{ top: 0, right: 50, left: 0, bottom: 0 }}
+        >
+          <defs>
+            <linearGradient id="gradient" x1=".5" y1="1" x2=".5">
+              <stop offset=".7" stop-color="#0d1421" stop-opacity=".5" />
+              <stop offset="1" stop-color="#28c420" stop-opacity=".4" />
+            </linearGradient>
+          </defs>
+          <XAxis dataKey="name" stroke={theme.colors.gray[850]} />
+          <YAxis dataKey="price" stroke={theme.colors.gray[850]} />
+          <Tooltip
+            formatter={(value: number) => `$${value.toFixed(2)}`}
+            contentStyle={{
+              backgroundColor: "#000",
+              border: "none",
+              borderRadius: "4px",
+            }}
+            labelStyle={{ color: "#fff" }}
           />
-          <stop
-            offset="95%"
-            stopColor={
-              solDayChange.includes("-") ? "rgb(185, 28, 28)" : "#03C03C"
-            }
-            stopOpacity={0}
+          <Area
+            type="monotone"
+            dataKey="price"
+            fill="url(#gradient)"
+            fillOpacity={1}
           />
-        </linearGradient>
-      </defs>
-      <XAxis dataKey="name" />
-      <YAxis dataKey="price" />
-      <Tooltip
-        formatter={(value: number) => `$${value.toFixed(2)}`}
-        contentStyle={{
-          backgroundColor: "#000",
-          border: "none",
-          borderRadius: '4px'
-        }}
-        labelStyle={{color: '#fff'}}
-      />
-      <Area
-        type="monotone"
-        dataKey="price"
-        fill="url(#gradient)"
-        fillOpacity={1}
-      />
-    </AreaChart>
+        </AreaChart>
+      </ResponsiveContainer>
+    </motion.div>
   );
 }
