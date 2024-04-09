@@ -23,7 +23,6 @@ import gsap from "gsap";
 import { TransactionModal } from "../TransactionModal";
 import { useSnackbar } from "../util/hooks/useSnackbar";
 import { TransSuccessAlert } from "../util/misc/Snackbars";
-import { Link } from "react-router-dom";
 import { SolChart } from "./components/SolChart";
 
 export default function SolHub(): JSX.Element {
@@ -208,13 +207,6 @@ export default function SolHub(): JSX.Element {
         connected={connected}
         openTransModal={openTransactionModal}
       />
-      {/* {connected && (
-        <Link to="/collectibles">
-          <button className="bg-black text-white p-4 rounded-md w-40 transition-shadow hover:shadow-2xl shadow-blue-500/50">
-            View collectibles
-          </button>
-        </Link>
-      )} */}
 
       <SolChart solDayChange={solDayChange ?? '0'} />
 

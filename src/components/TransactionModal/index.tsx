@@ -6,6 +6,8 @@ import TransactionClient from "../util/types/TransactionClient";
 import RingLoader from "react-spinners/RingLoader";
 import { css } from "@emotion/react";
 import { Phantom } from "../SolHub/util/types";
+import { PuffLoader } from "react-spinners";
+import { Close } from "@mui/icons-material";
 
 interface TMProps {
   open: boolean;
@@ -76,6 +78,12 @@ export const TransactionModal = (props: TMProps): JSX.Element => {
           style={{ transform: "translate(-50%, -50%)" }}
           className={`rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center bg-zinc-900 p-6`}
         >
+          <div
+            className="absolute top-4 right-4 text-white cursor-pointer"
+            onClick={handleClose}
+          >
+            <Close />
+          </div>
           <h3 className="text-white text-2xl font-medium font-noto self-start">
             Send Solana
           </h3>
@@ -104,7 +112,7 @@ export const TransactionModal = (props: TMProps): JSX.Element => {
               className="m-auto p-4 w-40 font-noto rounded-md hover:bg-blue-800 transition-colors flex justify-center items-center bg-blue-700 text-white"
             >
               {processingTransaction && (
-                <RingLoader color="#fff" size={25} css={override} loading />
+                <PuffLoader color="#fff" size={25} loading />
               )}
               {!processingTransaction && "Send"}
             </button>

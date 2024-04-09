@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+import { Close } from "@mui/icons-material";
 
 interface SMProps {
   open: boolean;
@@ -46,6 +47,12 @@ export const SettingsModal = ({
           style={{ transform: "translate(-50%, -50%)" }}
           className={`rounded-md outline-none ${modalWidth} absolute top-2/4 left-2/4 flex flex-col gap-10 justify-center items-center bg-zinc-900 p-6`}
         >
+          <div
+            className="absolute top-4 right-4 text-white cursor-pointer"
+            onClick={handleClose}
+          >
+            <Close />
+          </div>
           <h3 className="text-white text-2xl font-medium font-noto self-start">
             Profile
           </h3>

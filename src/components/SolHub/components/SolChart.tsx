@@ -47,11 +47,15 @@ export function SolChart({ solDayChange }: SolChartProps) {
 
   return (
     <motion.div
-      className="w-full lg:w-11/12 flex justify-center items-center min-h-[300px] lg:min-h-[600px]"
+      className="w-full lg:w-11/12 flex justify-center items-center min-h-[300px] lg:min-h-[600px] max-w-[87.5rem]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <ResponsiveContainer width="100%" minHeight={600}>
+      <ResponsiveContainer
+        width="100%"
+        minHeight={screenWidth < 768 ? 300 : 600}
+        style={{ maxWidth: "87.5rem" }}
+      >
         <AreaChart
           data={chartData}
           margin={

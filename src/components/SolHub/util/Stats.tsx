@@ -88,7 +88,7 @@ const Stats = ({
               balance ?? 0
             } SOL`}</p>
           </div>
-          <div className="w-full flex gap-4 justify-center items-center">
+          <div className="w-full flex flex-col md:flex-row gap-4 justify-center items-center">
             <button
               onClick={() => navigate("/collectibles")}
               className="bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800"
