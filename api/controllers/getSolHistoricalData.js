@@ -2,11 +2,11 @@ import axios from "axios";
 import { sub } from 'date-fns';
 
 export async function getSolHistoricalData(_, res) {
-  const sevenDaysAgo = sub(new Date(), {
-    days: 7
+  const oneMonthAgo = sub(new Date(), {
+    months: 1
   })
   try {
-    const result = await axios.get(`https://pro-api.coinmarketcap.com/v3/cryptocurrency/quotes/historical?symbol=SOL&time_start=${sevenDaysAgo.getTime()}&interval=daily&count=10`, {
+    const result = await axios.get(`https://pro-api.coinmarketcap.com/v3/cryptocurrency/quotes/historical?symbol=SOL&time_start=${oneMonthAgo.getTime()}&interval=daily&count=30`, {
       headers: {
         'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
       }

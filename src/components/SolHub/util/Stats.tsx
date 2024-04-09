@@ -1,6 +1,7 @@
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { useScreenSize } from "../../util/hooks/useScreenSize";
+import { useNavigate } from "react-router-dom";
 
 interface StatsProps {
   price: string | null;
@@ -18,6 +19,7 @@ const Stats = ({
   openTransModal,
 }: StatsProps) => {
   const { screenWidth } = useScreenSize();
+  const navigate = useNavigate();
 
   const negative: boolean = change !== null && change.includes("-");
   const solPrice: string =
@@ -86,12 +88,20 @@ const Stats = ({
               balance ?? 0
             } SOL`}</p>
           </div>
-          <button
-            onClick={openTransModal}
-            className="bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800"
-          >
-            Send SOL
-          </button>
+          <div className="w-full flex gap-4 justify-center items-center">
+            <button
+              onClick={() => navigate("/collectibles")}
+              className="bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800"
+            >
+              View collectibles
+            </button>
+            <button
+              onClick={openTransModal}
+              className="bg-blue-600 p-2 text-white font-noto w-2/4 rounded transition-colors hover:bg-blue-800"
+            >
+              Send SOL
+            </button>
+          </div>
         </div>
       )}
     </Paper>

@@ -12,6 +12,7 @@ import { useSolQuotes } from "../../util/hooks/react-query/useSolQuotes";
 import { PuffLoader } from "react-spinners";
 import { theme } from "../../util/theme";
 import { motion } from "framer-motion";
+import { useScreenSize } from "../../util/hooks/useScreenSize";
 
 interface PriceDataItem {
   name: string;
@@ -25,6 +26,7 @@ interface SolChartProps {
 
 export function SolChart({ solDayChange }: SolChartProps) {
   const { data: quotes, isLoading, isError } = useSolQuotes();
+  const { screenWidth } = useScreenSize();
 
   const chartData = useMemo((): PriceDataItem[] => {
     if (!quotes) return [];
@@ -35,7 +37,6 @@ export function SolChart({ solDayChange }: SolChartProps) {
     }));
   }, [quotes]);
 
-  console.log("🚀 ~ chartData ~ chartData:", chartData)
   if (isLoading) {
     return (
       <div className="w-full flex justify-center items-center h-80">
@@ -46,20 +47,33 @@ export function SolChart({ solDayChange }: SolChartProps) {
 
   return (
     <motion.div
-      className="w-11/12 flex justify-center items-center min-h-[600px]"
+      className="w-full lg:w-11/12 flex justify-center items-center min-h-[300px] lg:min-h-[600px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
       <ResponsiveContainer width="100%" minHeight={600}>
         <AreaChart
           data={chartData}
-          margin={{ top: 0, right: 50, left: 0, bottom: 0 }}
+          margin={
+            screenWidth > 768
+              ? { top: 0, right: 50, left: 0, bottom: 0 }
+              : { left: -24 }
+          }
         >
           <defs>
-            <linearGradient id="gradient" x1=".5" y1="1" x2=".5">
-              <stop offset=".7" stop-color="#0d1421" stop-opacity=".5" />
-              <stop offset="1" stop-color="#28c420" stop-opacity=".4" />
-            </linearGradient>
+            {solDayChange.includes("-") ? (
+              <linearGradient id="gradient" x1=".5" y1="1" x2=".5">
+                <stop stop-color="#0d1421" />
+                <stop offset=".32" stop-color="#0d1421" stop-opacity=".5" />
+                <stop offset="1" stop-color="#7f1d1d" stop-opacity=".3" />
+              </linearGradient>
+            ) : (
+              <linearGradient id="gradient" x1=".5" y1="1" x2=".5">
+                <stop stop-color="#0d1421" />
+                <stop offset=".32" stop-color="#0d1421" stop-opacity=".5" />
+                <stop offset="1" stop-color="#28c420" stop-opacity=".3" />
+              </linearGradient>
+            )}
           </defs>
           <XAxis dataKey="name" stroke={theme.colors.gray[850]} />
           <YAxis dataKey="price" stroke={theme.colors.gray[850]} />
@@ -77,6 +91,7 @@ export function SolChart({ solDayChange }: SolChartProps) {
             dataKey="price"
             fill="url(#gradient)"
             fillOpacity={1}
+            stroke={solDayChange.includes("-") ? "darkred" : "green"}
           />
         </AreaChart>
       </ResponsiveContainer>
